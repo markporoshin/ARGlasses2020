@@ -1,24 +1,28 @@
 import React from 'react';
-import {Row, Container, Image, Button, Table} from 'react-bootstrap';
-import {MDBTableBody, MDBTable} from 'mdbreact';
+import {Image, Button, Table} from 'react-bootstrap';
+import {MDBTableBody} from 'mdbreact';
 import './FaceSelector.css'
 
-import Face001 from './img/face1.jpg';
-import Face002 from './img/face2.jpg';
-import Face003 from './img/face3.jpg';
-import Face004 from './img/face4.jpg';
-
-const NUM_OF_IMAGES = 4;
-
+import Face001 from './img/faces/face1.jpg';
+import Face002 from './img/faces/face2.jpg';
+import Face003 from './img/faces/face3.jpg';
+import Face004 from './img/faces/face4.jpg';
 
 
 class FaceSelector extends React.Component {
+
+    constructor({faceCallback}) {
+        super({faceCallback})
+        this.state = {
+            faceCallback: faceCallback
+        }
+    }
 
     render() {
         const data = {
             rows:[
                 {
-                    'handle': <Button><Image src={Face001} fluid /></Button>
+                    'handle': <Button onClick={() => {this.state.faceCallback(Face001)}}><Image src={Face001} fluid /></Button>
                   },
                   {
                     'handle': <Button><Image src={Face002} fluid /></Button>
