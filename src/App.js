@@ -35,23 +35,22 @@ class App extends React.Component {
     let canvas = <Canvas face={this.state.selectedFace} 
                          glasses={this.state.selectedGlasses}
                          isModelsLoaded={this.state.isModelsLoaded}/>
-
+    let faceSelector =  <FaceSelector faceCallback={this.faceWasSelected.bind(this)}/>
+    let glassesSelector = <GlassesSelector glassesCallback={this.glassesWasSelected.bind(this)}/>
     return (
       <Container fluid>
-        <Row style={{ backgroundColor: 'lightblue', height: '100vh' }}>
+        <Row style={{ backgroundColor: 'lightblue', height: '100vh'}}>
           
-          <Col sm='3' style={{ backgroundColor: 'lightblue', height: '100%' }}>
-            <Row style={{ backgroundColor: 'lightblue', height: '100%' }}>
-              <FaceSelector faceCallback={this.faceWasSelected.bind(this)}/>
-            </Row>
+          <Col sm={3} style={{ backgroundColor: 'lightblue', height: '100%'}}>
+             {faceSelector}
           </Col>
           
-          <Col sm='6' style={{ backgroundColor: 'lightblue', height: '100%' }}>
+          <Col sm={6} style={{ backgroundColor: 'lightblue', height: '100%'}}>
             {canvas}
           </Col>
             
-          <Col sm='3' style={{ backgroundColor: 'lightblue', height: '100%' }}>
-            <GlassesSelector glassesCallback={this.glassesWasSelected.bind(this)}/>
+          <Col sm={3} style={{ backgroundColor: 'lightblue', height: '100%'}}>
+            {glassesSelector}
           </Col>
 
         </Row>
