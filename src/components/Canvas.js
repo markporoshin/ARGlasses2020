@@ -1,19 +1,28 @@
 import React from 'react';
-import {getLandmarks} from '../faceapi'
-
+import {getLandmarks, loadModels} from '../faceapi'
+import {faces, glasses} from '../images'
 
 
 function drawFace(state) {
     let i
     let canvas = state.canvas
     let ctx = canvas.getContext('2d')
+    ctx.fillStyle = "#FF0000";
+    ctx.strokeStyle = "#FF0000";
+    
     let fullDesc = state.fullDesc
     let faceImg = state.face
 
     const wImage = faceImg.width;
     const hImage = faceImg.height;
 
-    ctx.drawImage(faceImg, 0, 0, wImage, hImage, 0, 0, wImage, hImage);
+    var sizeWidth = ctx.canvas.clientWidth;
+    var sizeHeight = ctx.canvas.clientHeight;
+
+    let kh = sizeHeight / hImage;
+    let kw = sizeWidth / wImage;
+
+    ctx.drawImage(faceImg, 0, 0, wImage, hImage, 0, 0, sizeWidth, sizeHeight);
 
     const positions = fullDesc[0].landmarks._positions;
 
@@ -23,9 +32,9 @@ function drawFace(state) {
     {
       const p = positions[indicesEyeLeft[i]];
       if (i === 0)
-        ctx.moveTo(p._x, p._y);
+        ctx.moveTo(p._x * kw, p._y * kh);
       else
-        ctx.lineTo(p._x, p._y);
+        ctx.lineTo(p._x * kw, p._y * kh);
     }
     ctx.stroke();
 
@@ -36,9 +45,9 @@ function drawFace(state) {
     {
       const p = positions[indicesEyeRight[i]];
       if (i === 0)
-        ctx.moveTo(p._x, p._y);
+        ctx.moveTo(p._x * kw, p._y * kh);
       else
-        ctx.lineTo(p._x, p._y);
+        ctx.lineTo(p._x * kw, p._y * kh);
     }
     ctx.stroke();
 }
@@ -48,10 +57,10 @@ function drawFace(state) {
 
 class Canvas extends React.Component {
 
-    constructor({face, glasses, isModelLoaded}) {
-        super({face, glasses})
+    constructor(props) {
+        super(props)
         this.state = {
-            isModelLoaded: isModelLoaded,
+            isModelsLoaded: false,
             fullDesc: null,
             onTimeId: null,
             canvas: null
@@ -64,33 +73,50 @@ class Canvas extends React.Component {
             clearInterval(this.state.onTimeId)
             this.setState({
                 onTimeId: null, 
-                canvas: this.ref.canvas
+                canvas: this.refs.canvas
             })
             drawFace(this.state)
         }
     }
 
-    async componentWillUpdate(nextProps, nextState) {
-        try{
-            nextProps.face.onLoad = () => {
-                this.setState({
-                    onTimeId: setImmediate(this.onTime().bind(this), 50)
-                })
-            }
-        } catch (err) {}
-
-        if (this.state.fullDesc == null 
-            && nextProps.face != null) {
-            this.setState({fullDesc: await getLandmarks(nextProps.face)})
+    async componentDidMount() {
+        try {
+            await loadModels();
+            this.setState({isModelsLoaded: true})
+            console.log("model loaded")
+        } catch(err) {
+            console.log(err)
         }
-        
+      }
+
+    async onLoadFace() {
+        try{
+            const imgSrc = this.refs.face
+            this.setState({face: imgSrc})
+            
+            if (this.state.fullDesc == null 
+                && faces[this.props.faceNumber] != null
+                && this.state.isModelsLoaded) {
+                
+                this.setState({fullDesc: await getLandmarks(imgSrc)})
+            }
+            this.setState({
+                onTimeId: setInterval(this.onTime.bind(this), 50)
+            })
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     render() {
+        const styleImage = {
+            display: 'none'
+          };
         return (
-            <div>
-                <div>{this.props.face}</div>
-                <div>{this.props.glasses}</div>
+            <div height='100%' width='100%'>
+                <img src={faces[this.props.faceNumber]} onLoad={this.onLoadFace.bind(this)} style={styleImage} ref='face' alt='face'/>
+                <div>{this.props.faceNumber}</div>
+                <div>{this.props.glassesNumber}</div>
                 <canvas height='100%' ref='canvas'/>
             </div>
         )

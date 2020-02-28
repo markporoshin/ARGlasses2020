@@ -3,12 +3,12 @@ import {Image, Button, Table} from 'react-bootstrap';
 import {MDBTableBody} from 'mdbreact';
 import './FaceSelector.css'
 
-import Gl001 from './img/glasses/gl1.png';
-import Gl002 from './img/glasses/gl2.png';
-import Gl003 from './img/glasses/gl3.png';
-import Gl004 from './img/glasses/gl4.png';
-import Gl005 from './img/glasses/gl5.png';
-import Gl006 from './img/glasses/gl6.png';
+import Gl001 from './images/glasses/gl1.png';
+import Gl002 from './images/glasses/gl2.png';
+import Gl003 from './images/glasses/gl3.png';
+import Gl004 from './images/glasses/gl4.png';
+import Gl005 from './images/glasses/gl5.png';
+import Gl006 from './images/glasses/gl6.png';
 
 class GlassesSelector extends React.Component {
 

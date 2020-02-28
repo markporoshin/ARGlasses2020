@@ -3,10 +3,10 @@ import {Image, Button, Table} from 'react-bootstrap';
 import {MDBTableBody} from 'mdbreact';
 import './FaceSelector.css'
 
-import Face001 from './img/faces/face1.jpg';
-import Face002 from './img/faces/face2.jpg';
-import Face003 from './img/faces/face3.jpg';
-import Face004 from './img/faces/face4.jpg';
+import Face001 from './images/faces/face1.jpg';
+import Face002 from './images/faces/face2.jpg';
+import Face003 from './images/faces/face3.jpg';
+import Face004 from './images/faces/face4.jpg';
 
 
 class FaceSelector extends React.Component {
