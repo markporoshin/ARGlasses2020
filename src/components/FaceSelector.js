@@ -3,40 +3,30 @@ import {Image, Button, Table} from 'react-bootstrap';
 import {MDBTableBody} from 'mdbreact';
 import './FaceSelector.css'
 
-import Face001 from './images/faces/face1.jpg';
-import Face002 from './images/faces/face2.jpg';
-import Face003 from './images/faces/face3.jpg';
-import Face004 from './images/faces/face4.jpg';
+import {faces} from '../images'
 
 
 class FaceSelector extends React.Component {
 
-    constructor({faceCallback}) {
-        super({faceCallback})
+    constructor(props) {
+        super(props)
         this.state = {
-            faceCallback: faceCallback
+            faceCallback: props.faceCallback
         }
     }
 
     render() {
-        const data = {
-            rows:[
-                {
-                    'handle': <Button onClick={() => {this.state.faceCallback(Face001)}}><Image src={Face001} fluid /></Button>
-                  },
-                  {
-                    'handle': <Button><Image src={Face002} fluid /></Button>
-                  },
-                  {
-                    'handle': <Button><Image src={Face003} fluid /></Button>
-                  },
-                  {
-                    'handle': <Button><Image src={Face004} fluid /></Button>
-                  },
-        ]}
+        let rows = [];
+        faces.forEach((item, index, __)=>{
+            rows.push({'handle': 
+            <Button onClick={() => {this.state.faceCallback(index)}}>
+                <Image src={item} fluid />
+            </Button>
+            });
+        })
         return (
             <Table className='table-scroll-y'>
-                <MDBTableBody rows={data.rows}/>
+                <MDBTableBody rows={rows}/>
             </Table>
         )
     }

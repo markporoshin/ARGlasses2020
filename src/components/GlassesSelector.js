@@ -3,53 +3,29 @@ import {Image, Button, Table} from 'react-bootstrap';
 import {MDBTableBody} from 'mdbreact';
 import './FaceSelector.css'
 
-import Gl001 from './images/glasses/gl1.png';
-import Gl002 from './images/glasses/gl2.png';
-import Gl003 from './images/glasses/gl3.png';
-import Gl004 from './images/glasses/gl4.png';
-import Gl005 from './images/glasses/gl5.png';
-import Gl006 from './images/glasses/gl6.png';
+import {glasses} from '../images'
 
 class GlassesSelector extends React.Component {
 
-    constructor({glassesCallback}) {
-        super({glassesCallback})
+    constructor(props) {
+        super(props)
         this.state = {
-            glassesCallback: glassesCallback
+            glassesCallback: props.glassesCallback
         }
     }
 
     render() {
-        const data = {
-            rows:[
-                {
-                    'handle': <Button onClick={() => {this.state.glassesCallback(Gl001)}}>
-                        <Image src={Gl001} fluid /></Button>
-                  },
-                  {
-                    'handle': <Button onClick={() => {this.state.glassesCallback(Gl002)}}>
-                        <Image src={Gl002} fluid /></Button>
-                  },
-                  {
-                    'handle': <Button onClick={() => {this.state.glassesCallback(Gl003)}}>
-                        <Image src={Gl003} fluid /></Button>
-                  },
-                  {
-                    'handle': <Button onClick={() => {this.state.glassesCallback(Gl004)}}>
-                        <Image src={Gl004} fluid /></Button>
-                  },
-                  {
-                    'handle': <Button onClick={() => {this.state.glassesCallback(Gl005)}}>
-                        <Image src={Gl005} fluid /></Button>
-                  },
-                  {
-                    'handle': <Button onClick={() => {this.state.glassesCallback(Gl006)}}>
-                        <Image src={Gl006} fluid /></Button>
-                  },
-        ]}
+        let rows = [];
+        glasses.forEach((item, index, __)=>{
+            rows.push({'handle': 
+            <Button onClick={() => {this.state.glassesCallback(index)}}>
+                <Image src={item} fluid />
+            </Button>
+            });
+        })
         return (
             <Table className='table-scroll-y'>
-                <MDBTableBody rows={data.rows}/>
+                <MDBTableBody rows={rows}/>
             </Table>
         )
     }
