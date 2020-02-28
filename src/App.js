@@ -11,30 +11,27 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      selectedFace: null, 
-      selectedGlasses: null,
+      selectedFaceNumber: null, 
+      selectedGlassesNumber: null,
       isModelsLoaded: false,
     }
   
   }
 
-  async componentDidMount() {
-    await loadModels();
-    this.setState({isModelsLoaded: true})
+  
+
+  faceWasSelected(faceInd) {
+    this.setState({selectedFaceNumber: faceInd})
   }
 
-  faceWasSelected(face) {
-    this.setState({selectedFace: face})
-  }
-
-  glassesWasSelected(glasses) {
-    this.setState({selectedGlasses: glasses})
+  glassesWasSelected(glassesInd) {
+    this.setState({selectedGlassesNumber: glassesInd})
   }
 
   render() {
-    let canvas = <Canvas face={this.state.selectedFace} 
-                         glasses={this.state.selectedGlasses}
-                         isModelsLoaded={this.state.isModelsLoaded}/>
+    let canvas = <Canvas faceNumber={this.state.selectedFaceNumber} 
+                         glassesNumber={this.state.selectedGlassesNumber}
+                         />
     let faceSelector =  <FaceSelector faceCallback={this.faceWasSelected.bind(this)}/>
     let glassesSelector = <GlassesSelector glassesCallback={this.glassesWasSelected.bind(this)}/>
     return (
