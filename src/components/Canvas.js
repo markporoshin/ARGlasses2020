@@ -1,6 +1,7 @@
 import React from 'react';
 import {getLandmarks, loadModels} from '../faceapi'
 import {faces, glasses} from '../images'
+import {Col, Container,Row} from 'react-bootstrap';
 
 
 function drawFace(state) {
@@ -87,15 +88,14 @@ class Canvas extends React.Component {
         } catch(err) {
             console.log(err)
         }
-      }
+    }
 
     async onLoadFace() {
         try{
             const imgSrc = this.refs.face
             this.setState({face: imgSrc})
             
-            if (this.state.fullDesc == null 
-                && faces[this.props.faceNumber] != null
+            if (this.props.faceNumber != null
                 && this.state.isModelsLoaded) {
                 
                 this.setState({fullDesc: await getLandmarks(imgSrc)})
@@ -111,14 +111,18 @@ class Canvas extends React.Component {
     render() {
         const styleImage = {
             display: 'none'
-          };
+        };
         return (
-            <div height='100%' width='100%'>
-                <img src={faces[this.props.faceNumber]} onLoad={this.onLoadFace.bind(this)} style={styleImage} ref='face' alt='face'/>
-                <div>{this.props.faceNumber}</div>
-                <div>{this.props.glassesNumber}</div>
-                <canvas height='100%' ref='canvas'/>
-            </div>
+            <Container fluid style={{height: '100%'}}>
+                <Row fluid style={{height: '100%'}}>
+                    <Col fluid style={{height: '100%'}}>
+                        <img src={faces[this.props.faceNumber]} onLoad={this.onLoadFace.bind(this)} style={styleImage} ref='face' alt='face'/>
+                        <div>{this.props.faceNumber}</div>
+                        <div>{this.props.glassesNumber}</div>
+                        <canvas height='100%' width='100%' ref='canvas'/>
+                    </Col>
+                </Row>
+            </Container>
         )
     }
 }
