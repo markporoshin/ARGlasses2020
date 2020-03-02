@@ -14,16 +14,24 @@ function drawFace(state) {
     let fullDesc = state.fullDesc
     let faceImg = state.face
 
+
+    //real size in pixels
+    var clientWidth = ctx.canvas.clientWidth;
+    var clientHeight = ctx.canvas.clientHeight;
+
+    //canvas coords
+    var wCanvas = ctx.canvas.width;
+    var hCanvas = ctx.canvas.height;
+
     const wImage = faceImg.width;
     const hImage = faceImg.height;
 
-    var sizeWidth = ctx.canvas.clientWidth;
-    var sizeHeight = ctx.canvas.clientHeight;
+    let kx = wCanvas / wImage;
+    let ky = hCanvas / hImage;
 
-    let kh = sizeHeight / hImage;
-    let kw = sizeWidth / wImage;
+    let k = (kx) < (ky) ? (kx) : (ky);
 
-    ctx.drawImage(faceImg, 0, 0, wImage, hImage, 0, 0, sizeWidth, sizeHeight);
+    ctx.drawImage(faceImg, 0, 0, wImage * k, hImage * k);
 
     const positions = fullDesc[0].landmarks._positions;
 
@@ -33,9 +41,9 @@ function drawFace(state) {
     {
       const p = positions[indicesEyeLeft[i]];
       if (i === 0)
-        ctx.moveTo(p._x * kw, p._y * kh);
+        ctx.moveTo(p._x * k, p._y * k);
       else
-        ctx.lineTo(p._x * kw, p._y * kh);
+        ctx.lineTo(p._x * k, p._y * k);
     }
     ctx.stroke();
 
@@ -46,9 +54,9 @@ function drawFace(state) {
     {
       const p = positions[indicesEyeRight[i]];
       if (i === 0)
-        ctx.moveTo(p._x * kw, p._y * kh);
+        ctx.moveTo(p._x * k, p._y * k);
       else
-        ctx.lineTo(p._x * kw, p._y * kh);
+        ctx.lineTo(p._x * k, p._y * k);
     }
     ctx.stroke();
 }
@@ -92,7 +100,11 @@ class Canvas extends React.Component {
 
     async onLoadFace() {
         try{
+            let canvas = this.refs.canvas;
+            canvas.width = canvas.getContext('2d').canvas.clientWidth;
+            canvas.height = canvas.getContext('2d').canvas.clientHeight;
             const imgSrc = this.refs.face
+            this.setState({imgH: imgSrc.height, imgW: imgSrc.width})
             this.setState({face: imgSrc})
             
             if (this.props.faceNumber != null
@@ -112,17 +124,18 @@ class Canvas extends React.Component {
         const styleImage = {
             display: 'none'
         };
+
+        //<canvas style={{width:'100%',height:'100%'}} ref='canvas'/>
+
         return (
-            <Container fluid style={{height: '100%'}}>
-                <Row fluid style={{height: '100%'}}>
-                    <Col fluid style={{height: '100%'}}>
-                        <img src={faces[this.props.faceNumber]} onLoad={this.onLoadFace.bind(this)} style={styleImage} ref='face' alt='face'/>
-                        <div>{this.props.faceNumber}</div>
-                        <div>{this.props.glassesNumber}</div>
-                        <canvas height='100%' width='100%' ref='canvas'/>
-                    </Col>
-                </Row>
-            </Container>
+            <Row fluid style={{height: '100%'}}>
+                <Col style={{height: '100%'}}>
+                    <img src={faces[this.props.faceNumber]} onLoad={this.onLoadFace.bind(this)} style={styleImage} ref='face' alt='face'/>
+                    <div>{this.props.faceNumber}</div>
+                    <div>{this.props.glassesNumber}</div>
+                    <canvas style={{width:'100%',height:'100%'}} ref='canvas'/>
+                </Col>
+            </Row>
         )
     }
 }

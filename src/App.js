@@ -15,7 +15,6 @@ class App extends React.Component {
       selectedGlassesNumber: null,
       isModelsLoaded: false,
     }
-  
   }
 
   
