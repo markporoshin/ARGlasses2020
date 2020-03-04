@@ -3,7 +3,7 @@ import {Image, Button, Table} from 'react-bootstrap';
 import {MDBTableBody} from 'mdbreact';
 import '../styles/ScrollTable.css'
 
-import {glasses} from '../images'
+import {glasses} from '../resource'
 
 class GlassesSelector extends React.Component {
 

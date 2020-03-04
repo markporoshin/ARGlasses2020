@@ -3,7 +3,7 @@ import {Image, Button, Table} from 'react-bootstrap';
 import {MDBTableBody} from 'mdbreact';
 import '../styles/ScrollTable.css'
 
-import {faces} from '../images'
+import {faces} from '../resource'
 
 
 class FaceSelector extends React.Component {
