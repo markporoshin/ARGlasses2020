@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, Button, Table} from 'react-bootstrap';
 import {MDBTableBody} from 'mdbreact';
-import './FaceSelector.css'
+import '../styles/ScrollTable.css'
 
 import {faces} from '../images'
 
@@ -19,9 +19,7 @@ class FaceSelector extends React.Component {
         let rows = [];
         faces.forEach((item, index, __)=>{
             rows.push({'handle': 
-            <Button onClick={() => {this.state.faceCallback(index)}}>
-                <Image src={item} fluid />
-            </Button>
+                <Image onClick={() => {this.state.faceCallback(index)}} src={item} fluid />
             });
         })
         return (
