@@ -1,10 +1,11 @@
 import React from 'react';
-import {Col, Container,Row} from 'react-bootstrap';
+import {Col, Container,Row, Button, ButtonGroup, Pagination} from 'react-bootstrap';
 import './App.css';
 import FaceSelector from './components/FaceSelector';
 import GlassesSelector from './components/GlassesSelector';
 import Canvas from './components/Canvas'
-import {loadModels} from './faceapi'
+
+import {strings} from './resource'
 
 class App extends React.Component {
 
@@ -14,6 +15,7 @@ class App extends React.Component {
       selectedFaceNumber: null, 
       selectedGlassesNumber: null,
       isModelsLoaded: false,
+      language: 'RU'
     }
   }
 
@@ -33,15 +35,30 @@ class App extends React.Component {
                          />
     let faceSelector =  <FaceSelector faceCallback={this.faceWasSelected.bind(this)}/>
     let glassesSelector = <GlassesSelector glassesCallback={this.glassesWasSelected.bind(this)}/>
+    let str = strings[this.state.language].greeting
+
+    console.log(str)
     return (
       <Container fluid>
-        <Row style={{ backgroundColor: 'lightblue', height: '100vh'}}>
+        <Row>
+        <Col sm={2}>
+          <Pagination>
+            <Pagination.Item active={this.state.language === 'RU'} onClick={()=>{this.setState({language: 'RU'})}}>Русский</Pagination.Item>
+            <Pagination.Item active={this.state.language === 'EN'} onClick={()=>{this.setState({language: 'EN'})}}>English</Pagination.Item>
+          </Pagination>
+        </Col>
+        <Col sm={10}>
+          <div>{strings[this.state.language].APPName}</div>
+        </Col>
+        </Row>
+        <Row style={{height: '100vh'}}>
           
-          <Col sm={3} style={{ backgroundColor: 'lightblue', height: '100%'}}>
+          <Col sm={3} style={{height: '100%'}}>
              {faceSelector}
           </Col>
           
-          <Col sm={6} style={{ backgroundColor: 'lightblue', height: '100%'}}>
+          <Col sm={6} style={{height: '100%'}}>
+            <div>{strings[this.state.language].greeting}</div>
             {canvas}
           </Col>
             
