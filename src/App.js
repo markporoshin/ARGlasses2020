@@ -1,8 +1,9 @@
 import React from 'react';
-import {Col, Container,Row, Button, ButtonGroup, Pagination} from 'react-bootstrap';
+import {Col, Container,Row, Button, ButtonGroup, Pagination, Navbar, backgroundColor, yellow} from 'react-bootstrap';
 import './App.css';
 import FaceSelector from './components/FaceSelector';
 import GlassesSelector from './components/GlassesSelector';
+import Logo from './images/logo/glasses.png'
 import Canvas from './components/Canvas'
 
 import {strings} from './resource'
@@ -40,21 +41,41 @@ class App extends React.Component {
     console.log(str)
     return (
       <Container fluid>
-        <Row>
-        <Col sm={2}>
-          <Pagination>
-            <Pagination.Item active={this.state.language === 'RU'} onClick={()=>{this.setState({language: 'RU'})}}>Русский</Pagination.Item>
-            <Pagination.Item active={this.state.language === 'EN'} onClick={()=>{this.setState({language: 'EN'})}}>English</Pagination.Item>
-          </Pagination>
-        </Col>
-        <Col sm={10}>
-          <div>{strings[this.state.language].APPName}</div>
-        </Col>
-        </Row>
+          <Navbar bg="light" expand="lg">
+            <Navbar.Brand href="#home">
+              <img
+                src = {Logo}
+                width="100"
+                height="30"
+                className="d-inline-block align-top"
+                alt="React Bootstrap logo"
+              /> {'  '}
+              {strings[this.state.language].APPName}
+            </Navbar.Brand>
+
+            <Pagination sm = 'left' size = 'sm' >
+              <Pagination.Item active={this.state.language === 'RU'}
+                               onClick={()=>{this.setState({language: 'RU'})}}>Русский
+              </Pagination.Item>
+              <Pagination.Item active={this.state.language === 'EN'} 
+                              onClick={()=>{this.setState({language: 'EN'})}}>English
+              </Pagination.Item>
+            </Pagination>
+          </Navbar>
+          <br />
+
         <Row style={{height: '100vh'}}>
           
+          <Col sm={2}></Col>
           <Col sm={3} style={{height: '100%'}}>
-             {faceSelector}
+            <Row style={{height: '30vh'}}>
+              {faceSelector}
+            </Row>
+            <Row style={{height: '20vh'}}></Row>
+            <Row style={{height: '30vh'}}>
+              {glassesSelector}
+            </Row>
+             
           </Col>
           
           <Col sm={6} style={{height: '100%'}}>
@@ -62,9 +83,6 @@ class App extends React.Component {
             {canvas}
           </Col>
             
-          <Col sm={3} style={{ backgroundColor: 'lightblue', height: '100%'}}>
-            {glassesSelector}
-          </Col>
 
         </Row>
       </Container>
