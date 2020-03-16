@@ -1,16 +1,92 @@
 import React from 'react';
 import {getLandmarks, loadModels} from '../faceapi'
-import {faces, glasses} from '../resource'
-import {Col, Container,Row} from 'react-bootstrap';
+import {faces, rims, lins, rimsCenter, strings} from '../resource'
+import {Col, Row, Card, Form} from 'react-bootstrap';
+import InputRange from 'react-input-range'
+import 'react-input-range/lib/css/index.css'
 
 
-function rotate(point, angle) {
-    return {
-        _x: point._x * Math.cos(angle) + point._y * Math.sin(angle),
-        _y: point._y * Math.cos(angle) - point._x * Math.sin(angle)
-    }
+function drawGlasses(state) {
+    if (!(state.isRimLoaded || state.isLinsLoaded) || state.fullDesc == null)
+        return
+    let i
+    let canvas = state.canvas
+    let ctx = canvas.getContext('2d')
+    ctx.fillStyle = "#FF0000";
+    ctx.strokeStyle = "#FF0000";
+    
+    let fullDesc = state.fullDesc
+    let faceImg = state.face
+
+
+    // real size in pixels
+    // var clientWidth = ctx.canvas.clientWidth;
+    // var clientHeight = ctx.canvas.clientHeight;
+
+    //canvas coords
+    var wCanvas = ctx.canvas.width;
+    var hCanvas = ctx.canvas.height;
+
+    const wFace = faceImg.width;
+    const hFace = faceImg.height;
+
+    let kx = wCanvas / wFace;
+    let ky = hCanvas / hFace;
+
+    let kImg = (kx) < (ky) ? (kx) : (ky);
+
+
+    clearInterval(state.glassesInervalId)
+    const positions = fullDesc[0].landmarks._positions;
+
+    let rim = state.rim;
+    let lins = state.lins;
+
+    let leftPoint = positions[36];
+    let rightPoint = positions[45];
+
+    let angle = Math.atan((rightPoint._y - leftPoint._y) / (rightPoint._x - leftPoint._x))
+
+    let centerX = (leftPoint._x + rightPoint._x) / 2
+    let centerY = (leftPoint._y + rightPoint._y) / 2
+
+    const wGlassesImg = rim.width;
+    const hGlassesImg = rim.height;
+
+    let wGlasses = positions[16]._x - positions[0]._x;
+    let hGlasses = hGlassesImg * wGlasses / wGlassesImg
+
+    let x = (centerX * kImg - wGlasses / 2 * kImg)
+    let imgCenter = rimsCenter[state.glassesNumber];
+    let y = (centerY * kImg - hGlasses * imgCenter * kImg )
+
+    ctx.translate(x, y)
+    ctx.rotate(angle)
+    ctx.drawImage(rim, 0, 0, wGlasses * kImg, hGlasses * kImg)
+    ctx.globalAlpha = state.minAlpha + state.curAlpha / (state.maxAlpha - state.minAlpha);
+    ctx.drawImage(lins, 0, 0, wGlasses * kImg, hGlasses * kImg)
+    ctx.globalAlpha = 1;
+
+    /** ----- */
+    
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(wGlasses * kImg, 0);
+    ctx.lineTo(wGlasses * kImg, 0 + hGlasses * kImg);
+    ctx.lineTo(0, 0 + hGlasses * kImg);
+    ctx.lineTo(0, 0);
+    ctx.stroke();
+    /** ----- */
+
+    ctx.rotate(-angle)
+    ctx.translate(-x, -y)
+
+    ctx.beginPath();
+    ctx.moveTo(leftPoint._x* kImg, leftPoint._y * kImg);
+    ctx.lineTo(rightPoint._x * kImg, rightPoint._y * kImg);
+    ctx.stroke();
+        
 }
-
 
 
 function drawFace(state) {
@@ -46,52 +122,61 @@ function drawFace(state) {
         clearInterval(state.onTimeId)
 
         const positions = fullDesc[0].landmarks._positions;
-        if (state.isGlassesLoad) {
-            clearInterval(state.onGlassesId)
-            let glasses = state.glasses;
+        // if (state.isGlassesLoad) {
+        //     clearInterval(state.onGlassesId)
+        //     let rim = state.rim;
+        //     let lins = state.lins;
 
-            let leftPoint = positions[36];
-            let rightPoint = positions[45];
+        //     let leftPoint = positions[36];
+        //     let rightPoint = positions[45];
 
-            let angle = Math.atan((rightPoint._y - leftPoint._y) / (rightPoint._x - leftPoint._x))
-            console.log('angle: ' + angle)
+        //     let angle = Math.atan((rightPoint._y - leftPoint._y) / (rightPoint._x - leftPoint._x))
+        //     console.log('angle: ' + angle)
             
 
-            let centerX = (leftPoint._x + rightPoint._x) / 2
-            let centerY = (leftPoint._y + rightPoint._y) / 2
+        //     let centerX = (leftPoint._x + rightPoint._x) / 2
+        //     let centerY = (leftPoint._y + rightPoint._y) / 2
 
             
 
-            const wGlassesImg = glasses.width;
-            const hGlassesImg = glasses.height;
+        //     const wGlassesImg = rim.width;
+        //     const hGlassesImg = rim.height;
 
-            let wGlasses = positions[16]._x - positions[0]._x;
-            let hGlasses = hGlassesImg * wGlasses / wGlassesImg
+        //     let wGlasses = positions[16]._x - positions[0]._x;
+        //     let hGlasses = hGlassesImg * wGlasses / wGlassesImg
 
 
-            let x = (centerX * kImg - wGlasses / 2 * kImg)
-            let y = (centerY * kImg - hGlasses / 2 * kImg)
+        //     let x = (centerX * kImg - wGlasses / 2 * kImg)
+        //     let imgCenter = rimsCenter[state.glassesNumber];
+        //     let y = (centerY * kImg - hGlasses * imgCenter * kImg )
 
-            ctx.translate(x, y)
-            ctx.rotate(angle)
-            ctx.drawImage(glasses, 0, 0, wGlasses * kImg, hGlasses * kImg)
-            ctx.rotate(-angle)
-            ctx.translate(-x, -y)
+        //     ctx.translate(x, y)
+        //     ctx.rotate(angle)
+        //     ctx.drawImage(rim, 0, 0, wGlasses * kImg, hGlasses * kImg)
+        //     ctx.globalAlpha = 0.5;
+        //     ctx.drawImage(lins, 0, 0, wGlasses * kImg, hGlasses * kImg)
+        //     ctx.globalAlpha = 1;
+
+        //     /** ----- */
             
+        //     ctx.beginPath();
+        //     ctx.moveTo(0, 0);
+        //     ctx.lineTo(wGlasses * kImg, 0);
+        //     ctx.lineTo(wGlasses * kImg, 0 + hGlasses * kImg);
+        //     ctx.lineTo(0, 0 + hGlasses * kImg);
+        //     ctx.lineTo(0, 0);
+        //     ctx.stroke();
+        //     /** ----- */
 
-            ctx.beginPath();
-            ctx.moveTo(leftPoint._x* kImg, leftPoint._y * kImg);
-            ctx.lineTo(rightPoint._x * kImg, rightPoint._y * kImg);
-            ctx.stroke();
+        //     ctx.rotate(-angle)
+        //     ctx.translate(-x, -y)
 
-            // ctx.beginPath();
-            // ctx.moveTo(x, y);
-            // ctx.lineTo(x + wGlasses * kImg, y);
-            // ctx.lineTo(x + wGlasses * kImg, y + hGlasses * kImg);
-            // ctx.lineTo(x, y + hGlasses * kImg);
-            // ctx.lineTo(x, y);
-            // ctx.stroke();
-        }
+        //     ctx.beginPath();
+        //     ctx.moveTo(leftPoint._x* kImg, leftPoint._y * kImg);
+        //     ctx.lineTo(rightPoint._x * kImg, rightPoint._y * kImg);
+        //     ctx.stroke();
+            
+        // }
 
         ctx.beginPath();
         for (i = 0; i < 17; i++)
@@ -143,7 +228,12 @@ class Canvas extends React.Component {
             isGlassesLoad: false,
             fullDesc: null,
             onTimeId: null,
-            canvas: null
+            canvas: null,
+            isLinsLoaded: false,
+            isRimLoaded: false, 
+            curAlpha: 1,
+            maxAlpha: 10,
+            minAlpha: 0,
         }
     }
 
@@ -197,12 +287,28 @@ class Canvas extends React.Component {
         }
     }
 
-    async onLoadGlasses() {
-        this.setState({
-            glasses: this.refs.glasses, 
-            isGlassesLoad: true
-        }, ()=>{drawFace(this.state)})
+    async onLoadRim() {
+        this.setState({isRimLoaded : true}, () => {
+                this.setGlasses()
+        });
         
+    }
+
+    async onLoadLins() {
+        this.setState({isLinsLoaded : true});
+    }
+
+    async setGlasses() {
+        this.setState({
+            glassesNumber: this.props.glassesNumber,
+            rim: this.refs.rim,
+            lins: this.refs.lins,
+            isGlassesLoad: true}, 
+            () => {
+                this.setState({
+                    glassesInervalId: setInterval(() => drawGlasses(this.state))
+                })
+        })
     }
 
     render() {
@@ -213,11 +319,34 @@ class Canvas extends React.Component {
         return (
             <Row fluid style={{height: '100%'}}>
                 <Col style={{height: '100%'}}>
-                    <img src={faces[this.props.faceNumber]} onLoad={this.onLoadFace.bind(this)} style={styleImage} ref='face' alt='face'/>
-                    <img src={glasses[this.props.glassesNumber]} onLoad={this.onLoadGlasses.bind(this)} style={styleImage} ref='glasses' alt='glasses'/>
-                    <div>{this.props.faceNumber}</div>
-                    <div>{this.props.glassesNumber}</div>
-                    <canvas style={{width:'100%',height:'100%'}} ref='canvas'/>
+                    <Row style={{height: '10vh'}}>
+                        <Form style={{width: '100%'}}>
+                            <Form.Label>{strings['RU'].alpha}</Form.Label>
+                            <InputRange 
+                                        maxValue={this.state.maxAlpha}
+                                        minValue={this.state.minAlpha}
+                                        value={this.state.curAlpha}
+                                        onChange={value => this.setState({
+                                            curAlpha: value},
+                                            () => {
+                                                let canvas = this.state.canvas
+                                                if (canvas == null)
+                                                    return
+
+                                                canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height)
+                                                drawFace(this.state)
+                                                drawGlasses(this.state)
+                                            }
+                                        )} />
+                        </Form>
+                    </Row>
+                    <Row style={{height: '90vh'}}>
+                        <img src={faces[this.props.faceNumber]} onLoad={this.onLoadFace.bind(this)} style={styleImage} ref='face' alt='face'/>
+                        <img src={rims[this.props.glassesNumber]} onLoad={this.onLoadRim.bind(this)} style={styleImage} ref='rim' alt='glasses'/>
+                        <img src={lins[this.props.glassesNumber]} onLoad={this.onLoadLins.bind(this)} style={styleImage} ref='lins' alt='glasses'/>
+                        
+                        <canvas style={{width:'100%',height:'100%'}} ref='canvas'/>
+                    </Row>
                 </Col>
             </Row>
         )
