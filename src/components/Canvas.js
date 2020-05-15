@@ -6,10 +6,41 @@ import InputRange from 'react-input-range'
 import 'react-input-range/lib/css/index.css'
 
 
+function countAnchors(desc, glasses, kImg) {
+
+    const positions = desc[0].landmarks._positions;
+  
+    let leftPoint = positions[36];
+    let rightPoint = positions[45];
+  
+    let angle = Math.atan((rightPoint._y - leftPoint._y) / (rightPoint._x - leftPoint._x))
+  
+    let centerX = (leftPoint._x + rightPoint._x) / 2
+    let centerY = (leftPoint._y + rightPoint._y) / 2
+  
+    const wGlasses = glasses.width;
+    const hGlasses = glasses.height;
+  
+    let newWGlasses = positions[16]._x - positions[0]._x;
+    let newHGlasses = hGlasses * newWGlasses / wGlasses
+  
+    let x = (centerX - newWGlasses / 2)
+    let y = (centerY - newHGlasses / 2)
+  
+    const res = {
+        'angle': angle,
+        'x': x,
+        'y': y,
+        'h': newHGlasses,
+        'w': newWGlasses 
+    }
+    return res;
+}
+
+
 function drawGlasses(state) {
     if (!(state.isRimLoaded || state.isLinsLoaded) || state.fullDesc == null)
         return
-    let i
     let canvas = state.canvas
     let ctx = canvas.getContext('2d')
     ctx.fillStyle = "#FF0000";
@@ -18,12 +49,6 @@ function drawGlasses(state) {
     let fullDesc = state.fullDesc
     let faceImg = state.face
 
-
-    // real size in pixels
-    // var clientWidth = ctx.canvas.clientWidth;
-    // var clientHeight = ctx.canvas.clientHeight;
-
-    //canvas coords
     var wCanvas = ctx.canvas.width;
     var hCanvas = ctx.canvas.height;
 
@@ -42,50 +67,16 @@ function drawGlasses(state) {
     let rim = state.rim;
     let lins = state.lins;
 
-    let leftPoint = positions[36];
-    let rightPoint = positions[45];
+    const anchors = countAnchors(state.fullDesc, rim);
 
-    let angle = Math.atan((rightPoint._y - leftPoint._y) / (rightPoint._x - leftPoint._x))
-
-    let centerX = (leftPoint._x + rightPoint._x) / 2
-    let centerY = (leftPoint._y + rightPoint._y) / 2
-
-    const wGlassesImg = rim.width;
-    const hGlassesImg = rim.height;
-
-    let wGlasses = positions[16]._x - positions[0]._x;
-    let hGlasses = hGlassesImg * wGlasses / wGlassesImg
-
-    let x = (centerX * kImg - wGlasses / 2 * kImg)
-    let imgCenter = rimsCenter[state.glassesNumber];
-    let y = (centerY * kImg - hGlasses * imgCenter * kImg )
-
-    ctx.translate(x, y)
-    ctx.rotate(angle)
-    ctx.drawImage(rim, 0, 0, wGlasses * kImg, hGlasses * kImg)
+    ctx.translate(anchors['x'] * kImg, anchors['y'] * kImg)
+    ctx.rotate(anchors['angle'])
+    ctx.drawImage(rim, 0, 0, anchors['w'] * kImg, anchors['h'] * kImg)
     ctx.globalAlpha = state.minAlpha + state.curAlpha / (state.maxAlpha - state.minAlpha);
-    ctx.drawImage(lins, 0, 0, wGlasses * kImg, hGlasses * kImg)
+    ctx.drawImage(lins, 0, 0, anchors['w'] * kImg, anchors['h'] * kImg)
     ctx.globalAlpha = 1;
-
-    /** ----- */
-    
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(wGlasses * kImg, 0);
-    ctx.lineTo(wGlasses * kImg, 0 + hGlasses * kImg);
-    ctx.lineTo(0, 0 + hGlasses * kImg);
-    ctx.lineTo(0, 0);
-    ctx.stroke();
-    /** ----- */
-
-    ctx.rotate(-angle)
-    ctx.translate(-x, -y)
-
-    ctx.beginPath();
-    ctx.moveTo(leftPoint._x* kImg, leftPoint._y * kImg);
-    ctx.lineTo(rightPoint._x * kImg, rightPoint._y * kImg);
-    ctx.stroke();
-        
+    ctx.rotate(-anchors['angle'])
+    ctx.translate(-anchors['x'] * kImg, -anchors['y'] * kImg)
 }
 
 
@@ -117,103 +108,6 @@ function drawFace(state) {
     let kImg = (kx) < (ky) ? (kx) : (ky);
 
     ctx.drawImage(faceImg, 0, 0, wFace * kImg, hFace * kImg);
-
-    if (state.fullDesc != null) {
-        clearInterval(state.onTimeId)
-
-        const positions = fullDesc[0].landmarks._positions;
-        // if (state.isGlassesLoad) {
-        //     clearInterval(state.onGlassesId)
-        //     let rim = state.rim;
-        //     let lins = state.lins;
-
-        //     let leftPoint = positions[36];
-        //     let rightPoint = positions[45];
-
-        //     let angle = Math.atan((rightPoint._y - leftPoint._y) / (rightPoint._x - leftPoint._x))
-        //     console.log('angle: ' + angle)
-            
-
-        //     let centerX = (leftPoint._x + rightPoint._x) / 2
-        //     let centerY = (leftPoint._y + rightPoint._y) / 2
-
-            
-
-        //     const wGlassesImg = rim.width;
-        //     const hGlassesImg = rim.height;
-
-        //     let wGlasses = positions[16]._x - positions[0]._x;
-        //     let hGlasses = hGlassesImg * wGlasses / wGlassesImg
-
-
-        //     let x = (centerX * kImg - wGlasses / 2 * kImg)
-        //     let imgCenter = rimsCenter[state.glassesNumber];
-        //     let y = (centerY * kImg - hGlasses * imgCenter * kImg )
-
-        //     ctx.translate(x, y)
-        //     ctx.rotate(angle)
-        //     ctx.drawImage(rim, 0, 0, wGlasses * kImg, hGlasses * kImg)
-        //     ctx.globalAlpha = 0.5;
-        //     ctx.drawImage(lins, 0, 0, wGlasses * kImg, hGlasses * kImg)
-        //     ctx.globalAlpha = 1;
-
-        //     /** ----- */
-            
-        //     ctx.beginPath();
-        //     ctx.moveTo(0, 0);
-        //     ctx.lineTo(wGlasses * kImg, 0);
-        //     ctx.lineTo(wGlasses * kImg, 0 + hGlasses * kImg);
-        //     ctx.lineTo(0, 0 + hGlasses * kImg);
-        //     ctx.lineTo(0, 0);
-        //     ctx.stroke();
-        //     /** ----- */
-
-        //     ctx.rotate(-angle)
-        //     ctx.translate(-x, -y)
-
-        //     ctx.beginPath();
-        //     ctx.moveTo(leftPoint._x* kImg, leftPoint._y * kImg);
-        //     ctx.lineTo(rightPoint._x * kImg, rightPoint._y * kImg);
-        //     ctx.stroke();
-            
-        // }
-
-        ctx.beginPath();
-        for (i = 0; i < 17; i++)
-        {
-        const p = positions[i];
-        if (i === 0)
-            ctx.moveTo(p._x * kImg, p._y * kImg);
-        else
-            ctx.lineTo(p._x * kImg, p._y * kImg);
-        }
-        ctx.stroke();
-
-        const indicesEyeLeft = [36, 37, 38, 39, 40, 41, 36];
-        ctx.beginPath();
-        for (i = 0; i < indicesEyeLeft.length; i++)
-        {
-        const p = positions[indicesEyeLeft[i]];
-        if (i === 0)
-            ctx.moveTo(p._x * kImg, p._y * kImg);
-        else
-            ctx.lineTo(p._x * kImg, p._y * kImg);
-        }
-        ctx.stroke();
-
-        // draw eye right
-        const indicesEyeRight = [42, 43, 44, 45, 46, 47, 42];
-        ctx.beginPath();
-        for (i = 0; i < indicesEyeRight.length; i++)
-        {
-        const p = positions[indicesEyeRight[i]];
-        if (i === 0)
-            ctx.moveTo(p._x * kImg, p._y * kImg);
-        else
-            ctx.lineTo(p._x * kImg, p._y * kImg);
-        }
-        ctx.stroke();
-    }
 }
 
 
