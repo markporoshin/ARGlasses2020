@@ -1,6 +1,6 @@
 import React from 'react';
 import {getLandmarks, loadModels} from '../faceapi'
-import {faces, rims, lins, rimsCenter, strings} from '../resource'
+import {faces, rims, lins, rimsCenter, strings, hGlassesOffset} from '../resource'
 import {Col, Row, Card, Form} from 'react-bootstrap';
 import InputRange from 'react-input-range'
 import 'react-input-range/lib/css/index.css'
@@ -39,6 +39,7 @@ function countAnchors(desc, glasses, kImg) {
 
 
 function drawGlasses(state) {
+    drawFace(state)
     if (!(state.isRimLoaded || state.isLinsLoaded) || state.fullDesc == null)
         return
     let canvas = state.canvas
@@ -69,14 +70,14 @@ function drawGlasses(state) {
 
     const anchors = countAnchors(state.fullDesc, rim);
 
-    ctx.translate(anchors['x'] * kImg, anchors['y'] * kImg)
+    ctx.translate(anchors['x'] * kImg, anchors['y'] * kImg * (1 + state.hGlOffset))
     ctx.rotate(anchors['angle'])
     ctx.drawImage(rim, 0, 0, anchors['w'] * kImg, anchors['h'] * kImg)
     ctx.globalAlpha = state.minAlpha + state.curAlpha / (state.maxAlpha - state.minAlpha);
-    ctx.drawImage(lins, 0, 0, anchors['w'] * kImg, anchors['h'] * kImg)
+    ctx.drawImage(lins, 0, 0, anchors['w'] * kImg, anchors['h'] * kImg )
     ctx.globalAlpha = 1;
     ctx.rotate(-anchors['angle'])
-    ctx.translate(-anchors['x'] * kImg, -anchors['y'] * kImg)
+    ctx.translate(-anchors['x'] * kImg, -anchors['y'] * kImg * (1 + state.hGlOffset))
 }
 
 
@@ -197,7 +198,9 @@ class Canvas extends React.Component {
             glassesNumber: this.props.glassesNumber,
             rim: this.refs.rim,
             lins: this.refs.lins,
-            isGlassesLoad: true}, 
+            isGlassesLoad: true,
+            hGlOffset: hGlassesOffset[this.props.glassesNumber]
+        }, 
             () => {
                 this.setState({
                     glassesInervalId: setInterval(() => drawGlasses(this.state))
