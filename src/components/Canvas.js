@@ -28,11 +28,12 @@ const Canvas = (props) => {
 
     useEffect(()=>{
         if (faceImage) {
-            const k = min(container.current.clientHeight / faceImage.height, container.current.clientWidth / faceImage.width)
+            const ratio = min(container.current.clientHeight / faceImage.height, container.current.clientWidth / faceImage.width)
             setFaceSize({
-                'h': faceImage.height * k,
-                'w': faceImage.width * k,
-                'k': faceImage.height / faceImage.width
+                'h': faceImage.height * ratio,
+                'w': faceImage.width * ratio,
+                'k': faceImage.height / faceImage.width,
+                'ratio': ratio
             })
             setLanmarks(false)
         }
@@ -100,10 +101,10 @@ const Canvas = (props) => {
                         {(linsImage && glassesScheme) ?
                             <Image
                                 image={linsImage}
-                                height={glassesScheme['h']}
-                                width={glassesScheme['w']}
-                                y={glassesScheme['y']}
-                                x={glassesScheme['x']}
+                                height={glassesScheme['h'] * faceSize['ratio']}
+                                width={glassesScheme['w'] * faceSize['ratio']}
+                                y={glassesScheme['y'] * faceSize['ratio']}
+                                x={glassesScheme['x'] * faceSize['ratio']}
                                 rotation={glassesScheme.angle}
                                 opacity={0.5}
                             />
@@ -111,10 +112,10 @@ const Canvas = (props) => {
                         {(rimImage && glassesScheme) ?
                             <Image
                                 image={rimImage}
-                                height={glassesScheme['h']}
-                                width={glassesScheme['w']}
-                                y={glassesScheme['y']}
-                                x={glassesScheme['x']}
+                                height={glassesScheme['h'] * faceSize['ratio']}
+                                width={glassesScheme['w'] * faceSize['ratio']}
+                                y={glassesScheme['y'] * faceSize['ratio']}
+                                x={glassesScheme['x'] * faceSize['ratio']}
                                 rotation={glassesScheme.angle}
                                 opacity={1}
                             />

@@ -36,7 +36,7 @@ class FaceSelector extends React.Component {
             });
         })
         return (
-        <div>
+        <div style={{height: '100%'}}>
             <form onSubmit={(e)=>this._handleSubmit(e)}>
                 <input className="fileInput"
                     type="file"
