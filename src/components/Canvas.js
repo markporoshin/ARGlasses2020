@@ -1,10 +1,10 @@
 import {getLandmarks} from '../faceapi'
-import {faces, rims, lins, strings, hGlassesOffset, glasses, rimsCenter} from '../resource'
-import {Col, Row, Card, Form} from 'react-bootstrap';
-import {Image, Layer, Stage, Rect} from 'react-konva';
+import {rims, lins, strings, rimsCenter} from '../resource'
+import {Row, Form, Spinner, Button, Alert} from 'react-bootstrap';
+import {Image, Layer, Stage} from 'react-konva';
 import InputRange from 'react-input-range'
 import useImage from 'use-image';
-import React, {useCallback, useEffect, useState, useRef} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import 'react-input-range/lib/css/index.css'
 
 
@@ -13,7 +13,28 @@ function min(a, b) {
 }
 
 
+function FaceNotDetected({language}) {
+    const [isShow, setShowFlag] = useState(true)
+
+    const header = strings[language]['ohSnap']
+    const body = strings[language]['faceNotDetectedError']
+
+    if (isShow)
+      return (
+        <Alert variant="danger" onClose={()=>{setShowFlag(false)}} dismissible>
+          <Alert.Heading>{header}</Alert.Heading>
+          <p>
+            {body}
+          </p>
+        </Alert>
+      );
+    return null
+  }
+
+
 const Canvas = (props) => {
+    const detecting = strings[props.language]['Detecting']
+
     const minAlpha = 0
     const maxAlpha = 10
 
@@ -29,7 +50,12 @@ const Canvas = (props) => {
     const [alpha, setAlpha] = useState(0.5)
 
     const [isLandmarksLoaded, setLanmarks] = useState(false)
+    const [isFaceDetected, setFaceDetectedFlag] = useState(true)
     const container = useRef(null)
+
+    const [scale, setScale]=useState(1);
+    const [stageX, setStageX]=useState(0);
+    const [stageY, setStageY]=useState(0);
 
     useEffect(()=>{
         if (faceImage) {
@@ -46,6 +72,7 @@ const Canvas = (props) => {
 
     useEffect(() => {
         const loadDecs = async (faceImage) => {
+            setFaceDetectedFlag(true)
             setFaceDesc(await getLandmarks(faceImage))
         }
         if (faceImage && props.isModelsLoaded) {
@@ -56,6 +83,9 @@ const Canvas = (props) => {
     useEffect(() => {
         if (faceDesc && faceDesc[0]) {
             setLanmarks(true)
+            setFaceDetectedFlag(true)
+        } else if (faceDesc) {
+            setFaceDetectedFlag(false)
         }
     }, [faceDesc])
 
@@ -85,60 +115,110 @@ const Canvas = (props) => {
         }
     }, [isLandmarksLoaded, rimImage, linsImage])
 
+    const handleWheel = e => {
+        e.evt.preventDefault();
+        const scaleBy = 0.99;
+        const stage = e.target.getStage();
+        const oldScale = stage.scaleX();
+        const mousePointTo = {
+            x: stage.getPointerPosition().x / oldScale - stage.x() / oldScale,
+            y: stage.getPointerPosition().y / oldScale - stage.y() / oldScale
+        };
+        const newScale = e.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
 
+        stage.scale({ x: newScale, y: newScale });
+        setScale(newScale);
+        setStageX(-(mousePointTo.x - stage.getPointerPosition().x / newScale) * newScale);
+        setStageY(-(mousePointTo.y - stage.getPointerPosition().y / newScale) * newScale);
+    };
+
+    const dragStart = () => {};
+
+    const dragEnd = e => {
+        setStageX(e.target.x());
+        setStageY(e.target.y());
+    };
 
     return (
-        <Row style={{width:'100%',height:'100%'}} ref={container}>
-            <Form style={{width: '100%'}}>
-                <Form.Label>{strings['RU'].alpha}</Form.Label>
-                <InputRange 
-                            maxValue={maxAlpha}
-                            minValue={minAlpha}
-                            value={alpha}
-                            onChange={setAlpha} />
-            </Form>
-            {container.current ?
-            <Stage
-                height={container.current.clientHeight}
-                width={container.current.clientWidth * faceSize['k']}
-            >
-                {faceImage && faceSize ?
-                    <Layer>
+        <>
+            {faceImage && faceSize && !isLandmarksLoaded && isFaceDetected != false? 
+                    <Button variant="primary" disabled>
+                    <Spinner
+                        as="span"
+                        animation="grow"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                    />
+                    {detecting}
+                    </Button>
+            : null}
+            {isFaceDetected == false ? 
+                <FaceNotDetected language={props.language}/>
+            : null}
+            <Row style={{width:'100%',height:'10%'}}>
+                <Form style={{width: '100%'}}>
+                    <Form.Label>{strings[props.language].alpha}</Form.Label>
+                    <InputRange 
+                                maxValue={maxAlpha}
+                                minValue={minAlpha}
+                                value={alpha}
+                                onChange={setAlpha} />
+                </Form>
+            </Row>
+            <Row style={{width:'100%',height:'90%'}} ref={container}>
+                {container.current ?
+                <Stage
+                    height={container.current.clientHeight}
+                    width={container.current.clientWidth * faceSize['k']}
+                    onWheel={handleWheel}
+                    draggable
+                    onDragStart={dragStart}
+                    onDragEnd={dragEnd}
 
-                        <Image
-                            image={faceImage}
-                            height={faceSize['h']}
-                            width={faceSize['w']}
-                            opacity={1}
-                        />
-                        {(linsImage && glassesScheme) ?
+                    scaleX={scale}
+                    scaleY={scale}
+                    x={stageX}
+                    y={stageY}
+                >
+                    {faceImage && faceSize ?
+                        <Layer>
+
                             <Image
-                                image={linsImage}
-                                height={glassesScheme['h'] * faceSize['ratio']}
-                                width={glassesScheme['w'] * faceSize['ratio']}
-                                y={glassesScheme['y'] * faceSize['ratio']}
-                                x={glassesScheme['x'] * faceSize['ratio']}
-                                rotation={glassesScheme.angle}
-                                opacity={alpha / (maxAlpha - minAlpha)}
-                            />
-                        : null}
-                        {(rimImage && glassesScheme) ?
-                            <Image
-                                image={rimImage}
-                                height={glassesScheme['h'] * faceSize['ratio']}
-                                width={glassesScheme['w'] * faceSize['ratio']}
-                                y={glassesScheme['y'] * faceSize['ratio']}
-                                x={glassesScheme['x'] * faceSize['ratio']}
-                                rotation={glassesScheme.angle}
+                                image={faceImage}
+                                height={faceSize['h']}
+                                width={faceSize['w']}
                                 opacity={1}
                             />
-                        : null}
+                            {(linsImage && glassesScheme && isLandmarksLoaded) ?
+                                <Image
+                                    image={linsImage}
+                                    height={glassesScheme['h'] * faceSize['ratio']}
+                                    width={glassesScheme['w'] * faceSize['ratio']}
+                                    y={glassesScheme['y'] * faceSize['ratio']}
+                                    x={glassesScheme['x'] * faceSize['ratio']}
+                                    rotation={glassesScheme.angle}
+                                    opacity={alpha / (maxAlpha - minAlpha)}
+                                />
+                            : null}
+                            {(rimImage && glassesScheme && isLandmarksLoaded) ?
+                                <Image
+                                    image={rimImage}
+                                    height={glassesScheme['h'] * faceSize['ratio']}
+                                    width={glassesScheme['w'] * faceSize['ratio']}
+                                    y={glassesScheme['y'] * faceSize['ratio']}
+                                    x={glassesScheme['x'] * faceSize['ratio']}
+                                    rotation={glassesScheme.angle}
+                                    opacity={1}
+                                />
+                            : null}
 
-                    </Layer>
+                        </Layer>
+                    : null}
+                </Stage>
                 : null}
-            </Stage>
-            : null}
-        </Row>
+            </Row>
+        </>
     )
 }
 
