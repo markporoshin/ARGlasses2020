@@ -27,7 +27,7 @@ import lins5 from './images/glasses/lins5.png'
 export const faces = [Face1, Face2, Face3, Face4]
 export const glasses = [Glasses1, Glasses2, Glasses3, Glasses4, Glasses5]
 export const hGlassesOffset = [0.15, 0, 0, 0, 0]
-export const rimsCenter = [0.4]
+export const rimsCenter = [0.4, 0.6, 0.6, 0.6, 0.4]
 export const rims = [rim1, rim2, rim3, rim4, rim5]
 export const lins = [lins1, lins2, lins3, lins4, lins5]
 
