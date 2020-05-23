@@ -15,7 +15,7 @@ function min(a, b) {
 
 const Canvas = (props) => {
     const canvasRef = React.useRef()
-    const [faceImage] = useImage(faces[props.faceNumber])
+    const [faceImage] = useImage(props.faceImage)
     const [faceSize, setFaceSize] = useState({'k': 1})
     const [faceDesc, setFaceDesc] = useState(null)
 
