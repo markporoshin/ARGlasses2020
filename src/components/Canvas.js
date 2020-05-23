@@ -14,6 +14,9 @@ function min(a, b) {
 
 
 const Canvas = (props) => {
+    const minAlpha = 0
+    const maxAlpha = 10
+
     const canvasRef = React.useRef()
     const [faceImage] = useImage(props.faceImage)
     const [faceSize, setFaceSize] = useState({'k': 1})
@@ -22,6 +25,8 @@ const Canvas = (props) => {
     const [linsImage] = useImage(lins[props.glassesNumber])
     const [rimImage] = useImage(rims[props.glassesNumber])
     const [glassesScheme, setGlassesScheme] = useState(null)
+
+    const [alpha, setAlpha] = useState(0.5)
 
     const [isLandmarksLoaded, setLanmarks] = useState(false)
     const container = useRef(null)
@@ -84,6 +89,14 @@ const Canvas = (props) => {
 
     return (
         <Row style={{width:'100%',height:'100%'}} ref={container}>
+            <Form style={{width: '100%'}}>
+                <Form.Label>{strings['RU'].alpha}</Form.Label>
+                <InputRange 
+                            maxValue={maxAlpha}
+                            minValue={minAlpha}
+                            value={alpha}
+                            onChange={setAlpha} />
+            </Form>
             {container.current ?
             <Stage
                 height={container.current.clientHeight}
@@ -106,7 +119,7 @@ const Canvas = (props) => {
                                 y={glassesScheme['y'] * faceSize['ratio']}
                                 x={glassesScheme['x'] * faceSize['ratio']}
                                 rotation={glassesScheme.angle}
-                                opacity={0.5}
+                                opacity={alpha / (maxAlpha - minAlpha)}
                             />
                         : null}
                         {(rimImage && glassesScheme) ?

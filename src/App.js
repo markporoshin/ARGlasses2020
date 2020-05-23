@@ -4,9 +4,8 @@ import './App.css';
 import FaceSelector from './components/FaceSelector';
 import GlassesSelector from './components/GlassesSelector';
 import Canvas from './components/Canvas'
-import {faces} from './resource'
-
-import {strings} from './resource'
+import {faces, strings} from './resource'
+import {loadModels} from './faceapi'
 
 class App extends React.Component {
 
@@ -18,6 +17,14 @@ class App extends React.Component {
       isModelsLoaded: false,
       language: 'RU'
     }
+  }
+
+  async componentDidMount() {
+    await loadModels().then(()=>{
+      this.setState({
+        isModelsLoaded: true
+      })
+    })
   }
 
   faceWasLoaded(imagePreviewUrl) {
@@ -37,6 +44,7 @@ class App extends React.Component {
     const faceImage = this.state.uploadedFace ? this.state.uploadedFace : faces[this.state.selectedFaceNumber]
     let canvas = <Canvas faceImage={faceImage}
                          glassesNumber={this.state.selectedGlassesNumber}
+                         isModelsLoaded={this.state.isModelsLoaded}
                          />
     let faceSelector =  <FaceSelector faceCallback={this.faceWasSelected.bind(this)}
                                         faceLoadedCallback={this.faceWasLoaded.bind(this)}/>
@@ -60,9 +68,9 @@ class App extends React.Component {
         <Row style={{height: '100vh'}}>
           
           <Col sm={3} style={{height: '100%'}}>
-          <Row>
-             {faceSelector}
-          </Row>
+            <Row style={{height: '100%'}}>
+              {faceSelector}
+            </Row>
           </Col>
           
           <Col sm={6} style={{height: '100%'}}>
