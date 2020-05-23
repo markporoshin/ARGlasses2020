@@ -15,6 +15,19 @@ class FaceSelector extends React.Component {
         }
     }
 
+    handleImageChange(e) {
+        e.preventDefault();
+
+        let reader = new FileReader();
+        let file = e.target.files[0];
+
+        reader.onloadend = () => {
+            this.props.faceLoadedCallback(reader.result)
+        }
+
+        reader.readAsDataURL(file)
+    }
+
     render() {
         let rows = [];
         faces.forEach((item, index, __)=>{
@@ -23,9 +36,16 @@ class FaceSelector extends React.Component {
             });
         })
         return (
+        <div>
+            <form onSubmit={(e)=>this._handleSubmit(e)}>
+                <input className="fileInput"
+                    type="file"
+                    onChange={(e)=>this.handleImageChange(e)} />
+            </form>
             <Table className='table-scroll-y'>
                 <MDBTableBody rows={rows}/>
             </Table>
+        </div>
         )
     }
 }
