@@ -9,10 +9,10 @@ import {strings} from './resource'
 
 class App extends React.Component {
 
-  constructor(props) {
+  constructor(props) {д
     super(props)
     this.state = {
-      selectedFaceNumber: null, 
+      selectedFaceNumber: null,
       selectedGlassesNumber: null,
       isModelsLoaded: false,
       language: 'RU'
@@ -43,8 +43,10 @@ class App extends React.Component {
         <Row>
         <Col sm={2}>
           <Pagination>
-            <Pagination.Item active={this.state.language === 'RU'} onClick={()=>{this.setState({language: 'RU'})}}>Русский</Pagination.Item>
-            <Pagination.Item active={this.state.language === 'EN'} onClick={()=>{this.setState({language: 'EN'})}}>English</Pagination.Item>
+            <Pagination.Item active={this.state.language === 'RU'}
+                             onClick={()=>{this.setState({language: 'RU'})}}>Русский</Pagination.Item>
+            <Pagination.Item active={this.state.language === 'EN'}
+                             onClick={()=>{this.setState({language: 'EN'})}}>English</Pagination.Item>
           </Pagination>
         </Col>
         <Col sm={10}>
