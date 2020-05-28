@@ -23,7 +23,7 @@ describe('should get correct coordinates for photos', ()=>{
     });
 
     const doTest = () => {
-        return test('countAnchors test', () => {
+        return test('loadImage test', () => {
         // const img = await canvas.loadImage(__dirname +'/photos/' + photo + '.jpg')
         // const landmarks = await faceApi.detectAllFaces(img).withFaceLandmarks();
 
@@ -31,7 +31,7 @@ describe('should get correct coordinates for photos', ()=>{
 
         
         // expect(checkDistance(correct_set,exp_set)).toBe(true)
-            console.log('Starting countAnchors test...');
+            console.log('Starting loadImage test...');
             const pathToFace = 'images_to_test/faces/face1.jpg';
             const pathToGlasses = 'images_to_test/glasses/1_1.png'
 
@@ -42,7 +42,7 @@ describe('should get correct coordinates for photos', ()=>{
 
             expect(desc).not.toEqual(null);
 
-            const anchors = countAnchors(desc, glassesSrc);
+            // const anchors = countAnchors(desc, glassesSrc);
             expect(anchors['x'].not.toEqual(0));
             console.log('finish');
         })
