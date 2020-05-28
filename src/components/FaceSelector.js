@@ -3,7 +3,7 @@ import {Image, Button, Table} from 'react-bootstrap';
 import {MDBTableBody} from 'mdbreact';
 import '../styles/ScrollTable.css'
 
-import {faces} from '../resource'
+import {faces, strings} from '../resource'
 
 
 class FaceSelector extends React.Component {
@@ -15,6 +15,19 @@ class FaceSelector extends React.Component {
         }
     }
 
+    handleImageChange(e) {
+        e.preventDefault();
+
+        let reader = new FileReader();
+        let file = e.target.files[0];
+
+        reader.onloadend = () => {
+            this.props.faceLoadedCallback(reader.result)
+        }
+
+        reader.readAsDataURL(file)
+    }
+
     render() {
         let rows = [];
         faces.forEach((item, index, __)=>{
@@ -23,9 +36,16 @@ class FaceSelector extends React.Component {
             });
         })
         return (
+        <div style={{height: '100%'}}>
+            <form onSubmit={(e)=>this._handleSubmit(e)}>
+                <input className="fileInput"
+                    type="file"
+                    onChange={(e)=>this.handleImageChange(e)} />
+            </form>
             <Table className='table-scroll-y'>
                 <MDBTableBody rows={rows}/>
             </Table>
+        </div>
         )
     }
 }
