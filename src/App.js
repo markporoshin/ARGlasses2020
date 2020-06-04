@@ -32,7 +32,10 @@ class App extends React.Component {
     }
 
   faceWasSelected(faceInd) {
-    this.setState({selectedFaceNumber: faceInd})
+    this.setState({
+      selectedFaceNumber: faceInd,
+      uploadedFace: null,
+    })
   }
 
   glassesWasSelected(glassesInd) {
@@ -45,9 +48,11 @@ class App extends React.Component {
     let canvas = <Canvas faceImage={faceImage}
                          glassesNumber={this.state.selectedGlassesNumber}
                          isModelsLoaded={this.state.isModelsLoaded}
+                         language={this.state.language}
                          />
     let faceSelector =  <FaceSelector faceCallback={this.faceWasSelected.bind(this)}
-                                        faceLoadedCallback={this.faceWasLoaded.bind(this)}/>
+                                        faceLoadedCallback={this.faceWasLoaded.bind(this)}
+                                        language={this.state.language}/>
     let glassesSelector = <GlassesSelector glassesCallback={this.glassesWasSelected.bind(this)}/>
     let str = strings[this.state.language].greeting
 

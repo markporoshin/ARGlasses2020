@@ -36,10 +36,18 @@ export const strings = {
         'greeting' : 'привет незнакомец',
         'APPName' : 'AR примерка',
         'alpha' : 'прозрачность линз',
+        'faceNotDetectedError': 'Не удалось распознать лицо. Возможно вы перепутали картинку или загрузили слишком сложную для распознования',
+        'ohSnap': 'О черт! Ошибка!',
+        'Detecting': 'Распознование...',
+        'chooseFile': 'Выберете файл',
     },
     'EN' : {
         'greeting' : 'hello anonym',
         'APPName' : 'ARGlasses2020',
-        'alpha' : 'lins\'s alpha'
+        'alpha' : 'lins\'s alpha',
+        'faceNotDetectedError': 'Face doesn\'t detected. May be you confuse an image or put hard-detected face',
+        'ohSnap': 'Oh snap! You got an error!',
+        'Detecting': 'Detecting...',
+        'chooseFile': 'Choose file',
     }
 }
