@@ -74,7 +74,7 @@ const Canvas = (props) => {
     useEffect(() => {
         const loadDecs = async (faceImage) => {
             setFaceDetectedFlag(true)
-            setFaceDesc(await getLandmarks(faceImage))
+            setFaceDesc(await getLandmarks(props.faceImage))
         }
         if (faceImage && props.isModelsLoaded) {
             loadDecs(faceImage)
@@ -92,7 +92,7 @@ const Canvas = (props) => {
 
     useEffect(()=>{
         if (isLandmarksLoaded && linsImage && rimImage) {
-            setGlassesScheme(getCoordinates(faceDesc[0].landmarks._positions, rimImage, props.glassesNumber))
+            setGlassesScheme(getCoordinates(faceDesc[0].landmarks._positions, {height: rimImage.height, width: rimImage.width}, props.glassesNumber))
         }
     }, [isLandmarksLoaded, rimImage, linsImage])
 
