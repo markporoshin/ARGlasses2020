@@ -1,6 +1,6 @@
 import {rimsCenter} from "../resource";
 
-export const getCoordinates = (positions, rimImage, glassesNumbers) => {
+export const getCoordinates = (positions, {height, width}, glassesNumbers) => {
     let leftPoint = positions[36];
     let rightPoint = positions[45];
     let center = positions[27]
@@ -9,18 +9,8 @@ export const getCoordinates = (positions, rimImage, glassesNumbers) => {
 
     const angle = Math.atan((rightPoint._y - leftPoint._y) / (rightPoint._x - leftPoint._x))
 
-
-    const getH = () => {
-        const hGlassesImg = rimImage.height
-        const wGlassesImg = rimImage.width
-        return hGlassesImg * wGlasses / wGlassesImg
-    }
-    const getW = ()=>{
-        return positions[16]._x - positions[0]._x
-    }
-
-    let wGlasses = getW()
-    let hGlasses = getH()
+    let wGlasses = positions[16]._x - positions[0]._x
+    let hGlasses = height * wGlasses / width
 
     const getY = () => {
         let wc = 0
@@ -28,52 +18,38 @@ export const getCoordinates = (positions, rimImage, glassesNumbers) => {
         if (rel > 0.5 && rel < 2){
             wc = 0.35
             hc = 1
-            return center._y
-                - hGlasses * imgCenter * Math.cos(angle) * hc
-                - wGlasses * Math.sin(angle) * wc
         }
-        // turned right
         else if (rel <= 0.5){
-            wc = 1.5
-            hc = 0.5
-            return center._y
-                - hGlasses * imgCenter * Math.cos(angle) * hc
-                - wGlasses * Math.sin(angle) * wc
+            wc = 0.36
+            hc = 1
         }
         else if (rel >= 2){
             wc = 0.5
             hc = 0.7
-            return center._y
-                - hGlasses * imgCenter * Math.cos(angle) * hc
-                - wGlasses * Math.sin(angle) * wc
         }
+        return center._y
+            - hGlasses * imgCenter * Math.cos(angle) * hc
+            - wGlasses * Math.sin(angle) * wc
     }
 
-    const getx = () =>{
+    const getx = () => {
         let wc = 0
         let hc = 0.5
         if (rel > 0.5 && rel < 2){
             wc = 0.5
             hc = 0.5
-            return center._x
-                - wGlasses  * Math.cos(angle) * wc
-                + hGlasses * Math.sin(angle) * hc
         }
-        // turned right
         else if (rel <= 0.5){
             wc = 0.5
             hc = 0.5
-            return center._x
-                - wGlasses * Math.cos(angle) * wc
-                + hGlasses * Math.sin(angle) * hc
         }
         else if (rel >= 2) {
-            wc = 0.4
-            hc = 0.8
-            return center._x
-                - wGlasses * Math.cos(angle) * wc
-                + hGlasses * Math.sin(angle) * hc
+            wc = 0.3
+            hc = 0.9
         }
+        return center._x
+            - wGlasses  * Math.cos(angle) * wc
+            + hGlasses * Math.sin(angle) * hc
     }
     return {
         h: hGlasses,
@@ -83,6 +59,3 @@ export const getCoordinates = (positions, rimImage, glassesNumbers) => {
         angle: angle*(180/Math.PI)
     }
 }
-
-
-// export default {getCoordinates, getRatio}
