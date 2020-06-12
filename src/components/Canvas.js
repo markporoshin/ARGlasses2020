@@ -6,7 +6,7 @@ import InputRange from 'react-input-range'
 import useImage from 'use-image';
 import React, {useEffect, useState, useRef} from 'react'
 import 'react-input-range/lib/css/index.css'
-
+import {getCoordinates} from './calc'
 
 function min(a, b) {
     return a < b ? a : b
@@ -59,7 +59,8 @@ const Canvas = (props) => {
 
     useEffect(()=>{
         if (faceImage) {
-            const ratio = min(container.current.clientHeight / faceImage.height, container.current.clientWidth / faceImage.width)
+            const getRatio = () => min(container.current.clientHeight / faceImage.height, container.current.clientWidth / faceImage.width)
+            const ratio = getRatio()
             setFaceSize({
                 'h': faceImage.height * ratio,
                 'w': faceImage.width * ratio,
@@ -73,7 +74,7 @@ const Canvas = (props) => {
     useEffect(() => {
         const loadDecs = async (faceImage) => {
             setFaceDetectedFlag(true)
-            setFaceDesc(await getLandmarks(faceImage))
+            setFaceDesc(await getLandmarks(props.faceImage))
         }
         if (faceImage && props.isModelsLoaded) {
             loadDecs(faceImage)
@@ -91,27 +92,7 @@ const Canvas = (props) => {
 
     useEffect(()=>{
         if (isLandmarksLoaded && linsImage && rimImage) {
-            const positions = faceDesc[0].landmarks._positions
-            let leftPoint = positions[36];
-            let rightPoint = positions[45];
-
-            const wGlassesImg = rimImage.width
-            const hGlassesImg = rimImage.height
-            let wGlasses = positions[16]._x - positions[0]._x
-            let hGlasses = hGlassesImg * wGlasses / wGlassesImg
-
-            const x = ((leftPoint._x + rightPoint._x) / 2 - wGlasses / 2)
-            const imgCenter = rimsCenter[props.glassesNumber];
-            const y = ((leftPoint._y + rightPoint._y) / 2 - hGlasses * imgCenter)
-            const angle = Math.atan((rightPoint._y - leftPoint._y) / (rightPoint._x - leftPoint._x))
-
-            setGlassesScheme({
-                'h': hGlasses,
-                'w': wGlasses,
-                'x': x,
-                'y': y,
-                'angle': angle
-            })
+            setGlassesScheme(getCoordinates(faceDesc[0].landmarks._positions, {height: rimImage.height, width: rimImage.width}, props.glassesNumber))
         }
     }, [isLandmarksLoaded, rimImage, linsImage])
 
@@ -141,7 +122,7 @@ const Canvas = (props) => {
 
     return (
         <>
-            {faceImage && faceSize && !isLandmarksLoaded && isFaceDetected != false? 
+            {faceImage && faceSize && !isLandmarksLoaded && isFaceDetected !== false?
                     <Button variant="primary" disabled>
                     <Spinner
                         as="span"
@@ -153,13 +134,13 @@ const Canvas = (props) => {
                     {detecting}
                     </Button>
             : null}
-            {isFaceDetected == false ? 
+            {isFaceDetected === false ?
                 <FaceNotDetected language={props.language}/>
             : null}
             <Row style={{width:'100%',height:'10%'}}>
                 <Form style={{width: '100%'}}>
                     <Form.Label>{strings[props.language].alpha}</Form.Label>
-                    <InputRange 
+                    <InputRange
                                 maxValue={maxAlpha}
                                 minValue={minAlpha}
                                 value={alpha}
