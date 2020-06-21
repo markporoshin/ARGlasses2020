@@ -1,6 +1,7 @@
 # ARGLASSES2020
 
-[![Background image](https://avatanplus.com/files/resources/mid/5756d7ecc784b1552b3b7511.png)]
+
+[![Background image](https://github.com/markporoshin/ARGlasses2020/blob/master/logo.png)]
 
 ## Puprose
 The main goal of this project is to make it possible to try on glasses in augmented reality.
