@@ -1,227 +1,226 @@
-import React from 'react';
-import {getLandmarks, loadModels} from '../faceapi'
-import {faces, glasses} from '../resource'
-import {Col, Container,Row} from 'react-bootstrap';
+import {getLandmarks} from '../faceapi'
+import {rims, lins, strings, rimsCenter} from '../resource'
+import {Row, Form, Spinner, Button, Alert} from 'react-bootstrap';
+import {Image, Layer, Stage} from 'react-konva';
+import InputRange from 'react-input-range'
+import useImage from 'use-image';
+import React, {useEffect, useState, useRef} from 'react'
+import 'react-input-range/lib/css/index.css'
 
 
-function rotate(point, angle) {
-    return {
-        _x: point._x * Math.cos(angle) + point._y * Math.sin(angle),
-        _y: point._y * Math.cos(angle) - point._x * Math.sin(angle)
-    }
+function min(a, b) {
+    return a < b ? a : b
 }
 
 
+function FaceNotDetected({language}) {
+    const [isShow, setShowFlag] = useState(true)
 
-function drawFace(state) {
-    let i
-    let canvas = state.canvas
-    let ctx = canvas.getContext('2d')
-    ctx.fillStyle = "#FF0000";
-    ctx.strokeStyle = "#FF0000";
-    
-    let fullDesc = state.fullDesc
-    let faceImg = state.face
+    const header = strings[language]['ohSnap']
+    const body = strings[language]['faceNotDetectedError']
+
+    if (isShow)
+      return (
+        <Alert variant="danger" onClose={()=>{setShowFlag(false)}} dismissible>
+          <Alert.Heading>{header}</Alert.Heading>
+          <p>
+            {body}
+          </p>
+        </Alert>
+      );
+    return null
+  }
 
 
-    // real size in pixels
-    // var clientWidth = ctx.canvas.clientWidth;
-    // var clientHeight = ctx.canvas.clientHeight;
+const Canvas = (props) => {
+    const detecting = strings[props.language]['Detecting']
 
-    //canvas coords
-    var wCanvas = ctx.canvas.width;
-    var hCanvas = ctx.canvas.height;
+    const minAlpha = 0
+    const maxAlpha = 10
 
-    const wFace = faceImg.width;
-    const hFace = faceImg.height;
+   // const canvasRef = React.useRef()
+    const [faceImage] = useImage(props.faceImage)
+    const [faceSize, setFaceSize] = useState({'k': 1})
+    const [faceDesc, setFaceDesc] = useState(null)
 
-    let kx = wCanvas / wFace;
-    let ky = hCanvas / hFace;
+    const [linsImage] = useImage(lins[props.glassesNumber])
+    const [rimImage] = useImage(rims[props.glassesNumber])
+    const [glassesScheme, setGlassesScheme] = useState(null)
 
-    let kImg = (kx) < (ky) ? (kx) : (ky);
+    const [alpha, setAlpha] = useState(0.5)
 
-    ctx.drawImage(faceImg, 0, 0, wFace * kImg, hFace * kImg);
+    const [isLandmarksLoaded, setLanmarks] = useState(false)
+    const [isFaceDetected, setFaceDetectedFlag] = useState(true)
+    const container = useRef(null)
 
-    if (state.fullDesc != null) {
-        clearInterval(state.onTimeId)
+    const [scale, setScale]=useState(1);
+    const [stageX, setStageX]=useState(0);
+    const [stageY, setStageY]=useState(0);
 
-        const positions = fullDesc[0].landmarks._positions;
-        if (state.isGlassesLoad) {
-            clearInterval(state.onGlassesId)
-            let glasses = state.glasses;
+    useEffect(()=>{
+        if (faceImage) {
+            const ratio = min(container.current.clientHeight / faceImage.height, container.current.clientWidth / faceImage.width)
+            setFaceSize({
+                'h': faceImage.height * ratio,
+                'w': faceImage.width * ratio,
+                'k': faceImage.height / faceImage.width,
+                'ratio': ratio
+            })
+            setLanmarks(false)
+        }
+    }, [faceImage])
 
+    useEffect(() => {
+        const loadDecs = async (faceImage) => {
+            setFaceDetectedFlag(true)
+            setFaceDesc(await getLandmarks(faceImage))
+        }
+        if (faceImage && props.isModelsLoaded) {
+            loadDecs(faceImage)
+        }
+    }, [faceImage, isLandmarksLoaded,props.isModelsLoaded])
+
+    useEffect(() => {
+        if (faceDesc && faceDesc[0]) {
+            setLanmarks(true)
+            setFaceDetectedFlag(true)
+        } else if (faceDesc) {
+            setFaceDetectedFlag(false)
+        }
+    }, [faceDesc])
+
+    useEffect(()=>{
+        if (isLandmarksLoaded && linsImage && rimImage) {
+            const positions = faceDesc[0].landmarks._positions
             let leftPoint = positions[36];
             let rightPoint = positions[45];
 
-            let angle = Math.atan((rightPoint._y - leftPoint._y) / (rightPoint._x - leftPoint._x))
-            console.log('angle: ' + angle)
-            
-
-            let centerX = (leftPoint._x + rightPoint._x) / 2
-            let centerY = (leftPoint._y + rightPoint._y) / 2
-
-            
-
-            const wGlassesImg = glasses.width;
-            const hGlassesImg = glasses.height;
-
-            let wGlasses = positions[16]._x - positions[0]._x;
+            const wGlassesImg = rimImage.width
+            const hGlassesImg = rimImage.height
+            let wGlasses = positions[16]._x - positions[0]._x
             let hGlasses = hGlassesImg * wGlasses / wGlassesImg
 
+            const x = ((leftPoint._x + rightPoint._x) / 2 - wGlasses / 2)
+            const imgCenter = rimsCenter[props.glassesNumber];
+            const y = ((leftPoint._y + rightPoint._y) / 2 - hGlasses * imgCenter)
+            const angle = Math.atan((rightPoint._y - leftPoint._y) / (rightPoint._x - leftPoint._x))
 
-            let x = (centerX * kImg - wGlasses / 2 * kImg)
-            let y = (centerY * kImg - hGlasses / 2 * kImg)
-
-            ctx.translate(x, y)
-            ctx.rotate(angle)
-            ctx.drawImage(glasses, 0, 0, wGlasses * kImg, hGlasses * kImg)
-            ctx.rotate(-angle)
-            ctx.translate(-x, -y)
-            
-
-            ctx.beginPath();
-            ctx.moveTo(leftPoint._x* kImg, leftPoint._y * kImg);
-            ctx.lineTo(rightPoint._x * kImg, rightPoint._y * kImg);
-            ctx.stroke();
-
-            // ctx.beginPath();
-            // ctx.moveTo(x, y);
-            // ctx.lineTo(x + wGlasses * kImg, y);
-            // ctx.lineTo(x + wGlasses * kImg, y + hGlasses * kImg);
-            // ctx.lineTo(x, y + hGlasses * kImg);
-            // ctx.lineTo(x, y);
-            // ctx.stroke();
-        }
-
-        ctx.beginPath();
-        for (i = 0; i < 17; i++)
-        {
-        const p = positions[i];
-        if (i === 0)
-            ctx.moveTo(p._x * kImg, p._y * kImg);
-        else
-            ctx.lineTo(p._x * kImg, p._y * kImg);
-        }
-        ctx.stroke();
-
-        const indicesEyeLeft = [36, 37, 38, 39, 40, 41, 36];
-        ctx.beginPath();
-        for (i = 0; i < indicesEyeLeft.length; i++)
-        {
-        const p = positions[indicesEyeLeft[i]];
-        if (i === 0)
-            ctx.moveTo(p._x * kImg, p._y * kImg);
-        else
-            ctx.lineTo(p._x * kImg, p._y * kImg);
-        }
-        ctx.stroke();
-
-        // draw eye right
-        const indicesEyeRight = [42, 43, 44, 45, 46, 47, 42];
-        ctx.beginPath();
-        for (i = 0; i < indicesEyeRight.length; i++)
-        {
-        const p = positions[indicesEyeRight[i]];
-        if (i === 0)
-            ctx.moveTo(p._x * kImg, p._y * kImg);
-        else
-            ctx.lineTo(p._x * kImg, p._y * kImg);
-        }
-        ctx.stroke();
-    }
-}
-
-
-
-
-class Canvas extends React.Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            isModelsLoaded: false,
-            isGlassesLoad: false,
-            fullDesc: null,
-            onTimeId: null,
-            canvas: null
-        }
-    }
-
-    onTime() {
-        this.setState({
-            onTimeId: null, 
-            canvas: this.refs.canvas
-        })
-        drawFace(this.state)
-    }
-
-    async componentDidMount() {
-        try {
-            await loadModels();
-            this.setState({isModelsLoaded: true})
-            console.log("model loaded")
-        } catch(err) {
-            console.log(err)
-        }
-    }
-
-    async onLoadFace() {
-        try{
-            let canvas = this.refs.canvas;
-            canvas.width = canvas.getContext('2d').canvas.clientWidth;
-            canvas.height = canvas.getContext('2d').canvas.clientHeight;
-            const imgSrc = this.refs.face
-            this.setState({imgH: imgSrc.height, imgW: imgSrc.width})
-            this.setState({face: imgSrc})
-
-            this.setState({
-                onTimeId: null, 
-                canvas: this.refs.canvas
-            }, () => {
-                drawFace(this.state)
+            setGlassesScheme({
+                'h': hGlasses,
+                'w': wGlasses,
+                'x': x,
+                'y': y,
+                'angle': angle
             })
-            //drawFace(this.state)
-            // this.setState({
-            //     onTimeId: setInterval(this.onTime.bind(this), 50)
-            // })
-            if (this.props.faceNumber != null
-                && this.state.isModelsLoaded) {
-                
-                this.setState({fullDesc: await getLandmarks(imgSrc)}, () => {
-                    drawFace(this.state)
-                })
-            }
-            
-        } catch (err) {
-            console.log(err);
         }
-    }
+    }, [isLandmarksLoaded, rimImage, linsImage,faceDesc,props.glassesNumber])
 
-    async onLoadGlasses() {
-        this.setState({
-            glasses: this.refs.glasses, 
-            isGlassesLoad: true
-        }, ()=>{drawFace(this.state)})
-        
-    }
-
-    render() {
-        const styleImage = {
-            display: 'none'
+    const handleWheel = e => {
+        e.evt.preventDefault();
+        const scaleBy = 0.99;
+        const stage = e.target.getStage();
+        const oldScale = stage.scaleX();
+        const mousePointTo = {
+            x: stage.getPointerPosition().x / oldScale - stage.x() / oldScale,
+            y: stage.getPointerPosition().y / oldScale - stage.y() / oldScale
         };
+        const newScale = e.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
 
-        return (
-            <Row fluid style={{height: '100%'}}>
-                <Col style={{height: '100%'}}>
-                    <img src={faces[this.props.faceNumber]} onLoad={this.onLoadFace.bind(this)} style={styleImage} ref='face' alt='face'/>
-                    <img src={glasses[this.props.glassesNumber]} onLoad={this.onLoadGlasses.bind(this)} style={styleImage} ref='glasses' alt='glasses'/>
-                    <div>{this.props.faceNumber}</div>
-                    <div>{this.props.glassesNumber}</div>
-                    <canvas style={{width:'100%',height:'100%'}} ref='canvas'/>
-                </Col>
+        stage.scale({ x: newScale, y: newScale });
+        setScale(newScale);
+        setStageX(-(mousePointTo.x - stage.getPointerPosition().x / newScale) * newScale);
+        setStageY(-(mousePointTo.y - stage.getPointerPosition().y / newScale) * newScale);
+    };
+
+    const dragStart = () => {};
+
+    const dragEnd = e => {
+        setStageX(e.target.x());
+        setStageY(e.target.y());
+    };
+
+    return (
+        <>
+            {faceImage && faceSize && !isLandmarksLoaded && isFaceDetected !== false? 
+                    <Button variant="primary" disabled>
+                    <Spinner
+                        as="span"
+                        animation="grow"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                    />
+                    {detecting}
+                    </Button>
+            : null}
+            {isFaceDetected === false ? 
+                <FaceNotDetected language={props.language}/>
+            : null}
+            <Row style={{width:'100%',height:'10%'}}>
+                <Form style={{width: '100%'}}>
+                    <Form.Label>{strings[props.language].alpha}</Form.Label>
+                    <InputRange 
+                                maxValue={maxAlpha}
+                                minValue={minAlpha}
+                                value={alpha}
+                                onChange={setAlpha} />
+                </Form>
             </Row>
-        )
-    }
+            <Row style={{width:'100%',height:'90%'}} ref={container}>
+                {container.current ?
+                <Stage
+                    height={container.current.clientHeight}
+                    width={container.current.clientWidth * faceSize['k']}
+                    onWheel={handleWheel}
+                    draggable
+                    onDragStart={dragStart}
+                    onDragEnd={dragEnd}
+
+                    scaleX={scale}
+                    scaleY={scale}
+                    x={stageX}
+                    y={stageY}
+                >
+                    {faceImage && faceSize ?
+                        <Layer>
+
+                            <Image
+                                image={faceImage}
+                                height={faceSize['h']}
+                                width={faceSize['w']}
+                                opacity={1}
+                            />
+                            {(linsImage && glassesScheme && isLandmarksLoaded) ?
+                                <Image
+                                    image={linsImage}
+                                    height={glassesScheme['h'] * faceSize['ratio']}
+                                    width={glassesScheme['w'] * faceSize['ratio']}
+                                    y={glassesScheme['y'] * faceSize['ratio']}
+                                    x={glassesScheme['x'] * faceSize['ratio']}
+                                    rotation={glassesScheme.angle}
+                                    opacity={alpha / (maxAlpha - minAlpha)}
+                                />
+                            : null}
+                            {(rimImage && glassesScheme && isLandmarksLoaded) ?
+                                <Image
+                                    image={rimImage}
+                                    height={glassesScheme['h'] * faceSize['ratio']}
+                                    width={glassesScheme['w'] * faceSize['ratio']}
+                                    y={glassesScheme['y'] * faceSize['ratio']}
+                                    x={glassesScheme['x'] * faceSize['ratio']}
+                                    rotation={glassesScheme.angle}
+                                    opacity={1}
+                                />
+                            : null}
+
+                        </Layer>
+                    : null}
+                </Stage>
+                : null}
+            </Row>
+        </>
+    )
 }
+
 
 export default Canvas
