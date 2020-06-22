@@ -33,8 +33,8 @@ export const lins = [lins1, lins2, lins3, lins4, lins5]
 
 export const strings = {
     'RU' : {
-        'greeting' : 'привет незнакомец',
-        'APPName' : 'AR примерка',
+        
+        'APPName' : 'Виртуальные очки',
         'alpha' : 'прозрачность линз',
         'faceNotDetectedError': 'Не удалось распознать лицо. Возможно вы перепутали картинку или загрузили слишком сложную для распознования',
         'ohSnap': 'О черт! Ошибка!',
@@ -42,8 +42,7 @@ export const strings = {
         'chooseFile': 'Выберете файл',
     },
     'EN' : {
-        'greeting' : 'hello anonym',
-        'APPName' : 'ARGlasses2020',
+        'APPName' : 'Virtual glasses',
         'alpha' : 'lins\'s alpha',
         'faceNotDetectedError': 'Face doesn\'t detected. May be you confuse an image or put hard-detected face',
         'ohSnap': 'Oh snap! You got an error!',
