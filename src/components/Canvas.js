@@ -1,5 +1,5 @@
 import {getLandmarks} from '../faceapi'
-import {rims, lins, strings, rimsCenter} from '../resource'
+import {rims, lins, strings} from '../resource'
 import {Row, Form, Spinner, Button, Alert} from 'react-bootstrap';
 import {Image, Layer, Stage} from 'react-konva';
 import InputRange from 'react-input-range'

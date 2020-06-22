@@ -1,9 +1,9 @@
 import React from 'react';
-import {Image, Button, Table} from 'react-bootstrap';
+import {Image, Table} from 'react-bootstrap';
 import {MDBTableBody} from 'mdbreact';
 import '../styles/ScrollTable.css'
 
-import {faces, strings} from '../resource'
+import {faces} from '../resource'
 
 
 class FaceSelector extends React.Component {

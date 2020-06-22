@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, Button, Table} from 'react-bootstrap';
+import {Image, Table} from 'react-bootstrap';
 import {MDBTableBody} from 'mdbreact';
 import '../styles/ScrollTable.css'
 
