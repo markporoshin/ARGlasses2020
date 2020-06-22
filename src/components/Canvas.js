@@ -69,7 +69,7 @@ const Canvas = (props) => {
             })
             setLanmarks(false)
         }
-    }, [faceImage, isLandmarksLoaded,props.faceImagem,props.isModelsLoaded])
+    }, [faceImage, isLandmarksLoaded,props.faceImage,props.isModelsLoaded])
 
     useEffect(() => {
         const loadDecs = async (faceImage) => {
