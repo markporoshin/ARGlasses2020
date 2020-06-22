@@ -1,5 +1,5 @@
 import React from 'react';
-import {Col, Container,Row, Button, ButtonGroup, Pagination} from 'react-bootstrap';
+import {Col, Container,Row,Pagination} from 'react-bootstrap';
 import './App.css';
 import FaceSelector from './components/FaceSelector';
 import GlassesSelector from './components/GlassesSelector';
