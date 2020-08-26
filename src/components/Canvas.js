@@ -20,16 +20,18 @@ function FaceNotDetected({language}) {
     const body = strings[language]['faceNotDetectedError']
 
     if (isShow)
-      return (
-        <Alert variant="danger" onClose={()=>{setShowFlag(false)}} dismissible>
-          <Alert.Heading>{header}</Alert.Heading>
-          <p>
-            {body}
-          </p>
-        </Alert>
-      );
+        return (
+            <Alert variant="danger" onClose={() => {
+                setShowFlag(false)
+            }} dismissible>
+                <Alert.Heading>{header}</Alert.Heading>
+                <p>
+                    {body}
+                </p>
+            </Alert>
+        );
     return null
-  }
+}
 
 
 const Canvas = (props) => {
@@ -38,7 +40,7 @@ const Canvas = (props) => {
     const minAlpha = 0
     const maxAlpha = 10
 
-    
+
     const [faceImage] = useImage(props.faceImage)
     const [faceSize, setFaceSize] = useState({'k': 1})
     const [faceDesc, setFaceDesc] = useState(null)
@@ -53,11 +55,11 @@ const Canvas = (props) => {
     const [isFaceDetected, setFaceDetectedFlag] = useState(true)
     const container = useRef(null)
 
-    const [scale, setScale]=useState(1);
-    const [stageX, setStageX]=useState(0);
-    const [stageY, setStageY]=useState(0);
+    const [scale, setScale] = useState(1);
+    const [stageX, setStageX] = useState(0);
+    const [stageY, setStageY] = useState(0);
 
-    useEffect(()=>{
+    useEffect(() => {
         if (faceImage) {
             const getRatio = () => min(container.current.clientHeight / faceImage.height, container.current.clientWidth / faceImage.width)
             const ratio = getRatio()
@@ -69,7 +71,7 @@ const Canvas = (props) => {
             })
             setLanmarks(false)
         }
-    }, [faceImage, isLandmarksLoaded,props.faceImage,props.isModelsLoaded])
+    }, [faceImage, isLandmarksLoaded, props.faceImage, props.isModelsLoaded])
 
     useEffect(() => {
         const loadDecs = async (faceImage) => {
@@ -79,7 +81,7 @@ const Canvas = (props) => {
         if (faceImage && props.isModelsLoaded) {
             loadDecs(faceImage)
         }
-    }, [faceImage, isLandmarksLoaded,props.faceImage,props.isModelsLoaded])
+    }, [faceImage, isLandmarksLoaded, props.faceImage, props.isModelsLoaded])
 
     useEffect(() => {
         if (faceDesc && faceDesc[0]) {
@@ -90,11 +92,14 @@ const Canvas = (props) => {
         }
     }, [faceDesc])
 
-    useEffect(()=>{
+    useEffect(() => {
         if (isLandmarksLoaded && linsImage && rimImage) {
-            setGlassesScheme(getCoordinates(faceDesc[0].landmarks._positions, {height: rimImage.height, width: rimImage.width}, props.glassesNumber))
+            setGlassesScheme(getCoordinates(faceDesc[0].landmarks._positions, {
+                height: rimImage.height,
+                width: rimImage.width
+            }, props.glassesNumber));
         }
-    }, [isLandmarksLoaded, rimImage, linsImage,faceDesc,props.glassesNumber])
+    }, [isLandmarksLoaded, rimImage, linsImage, faceDesc, props.glassesNumber])
 
     const handleWheel = e => {
         e.evt.preventDefault();
@@ -107,13 +112,14 @@ const Canvas = (props) => {
         };
         const newScale = e.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
 
-        stage.scale({ x: newScale, y: newScale });
+        stage.scale({x: newScale, y: newScale});
         setScale(newScale);
         setStageX(-(mousePointTo.x - stage.getPointerPosition().x / newScale) * newScale);
         setStageY(-(mousePointTo.y - stage.getPointerPosition().y / newScale) * newScale);
     };
 
-    const dragStart = () => {};
+    const dragStart = () => {
+    };
 
     const dragEnd = e => {
         setStageX(e.target.x());
@@ -122,8 +128,8 @@ const Canvas = (props) => {
 
     return (
         <>
-            {faceImage && faceSize && !isLandmarksLoaded && isFaceDetected !== false?
-                    <Button variant="primary" disabled>
+            {faceImage && faceSize && !isLandmarksLoaded && isFaceDetected !== false ?
+                <Button variant="primary" disabled>
                     <Spinner
                         as="span"
                         animation="grow"
@@ -132,72 +138,72 @@ const Canvas = (props) => {
                         aria-hidden="true"
                     />
                     {detecting}
-                    </Button>
-            : null}
+                </Button>
+                : null}
             {isFaceDetected === false ?
                 <FaceNotDetected language={props.language}/>
-            : null}
-            <Row style={{width:'100%',height:'10%'}}>
+                : null}
+            <Row style={{width: '100%', height: '10%'}}>
                 <Form style={{width: '100%'}}>
                     <Form.Label>{strings[props.language].alpha}</Form.Label>
                     <InputRange
-                                maxValue={maxAlpha}
-                                minValue={minAlpha}
-                                value={alpha}
-                                onChange={setAlpha} />
+                        maxValue={maxAlpha}
+                        minValue={minAlpha}
+                        value={alpha}
+                        onChange={setAlpha}/>
                 </Form>
             </Row>
-            <Row style={{width:'100%',height:'90%'}} ref={container}>
+            <Row style={{width: '100%', height: '90%'}} ref={container}>
                 {container.current ?
-                <Stage
-                    height={container.current.clientHeight}
-                    width={container.current.clientWidth * faceSize['k']}
-                    onWheel={handleWheel}
-                    draggable
-                    onDragStart={dragStart}
-                    onDragEnd={dragEnd}
+                    <Stage
+                        height={container.current.clientHeight}
+                        width={container.current.clientWidth * faceSize['k']}
+                        onWheel={handleWheel}
+                        draggable
+                        onDragStart={dragStart}
+                        onDragEnd={dragEnd}
 
-                    scaleX={scale}
-                    scaleY={scale}
-                    x={stageX}
-                    y={stageY}
-                >
-                    {faceImage && faceSize ?
-                        <Layer>
+                        scaleX={scale}
+                        scaleY={scale}
+                        x={stageX}
+                        y={stageY}
+                    >
+                        {faceImage && faceSize ?
+                            <Layer>
 
-                            <Image
-                                image={faceImage}
-                                height={faceSize['h']}
-                                width={faceSize['w']}
-                                opacity={1}
-                            />
-                            {(linsImage && glassesScheme && isLandmarksLoaded) ?
                                 <Image
-                                    image={linsImage}
-                                    height={glassesScheme['h'] * faceSize['ratio']}
-                                    width={glassesScheme['w'] * faceSize['ratio']}
-                                    y={glassesScheme['y'] * faceSize['ratio']}
-                                    x={glassesScheme['x'] * faceSize['ratio']}
-                                    rotation={glassesScheme.angle}
-                                    opacity={alpha / (maxAlpha - minAlpha)}
-                                />
-                            : null}
-                            {(rimImage && glassesScheme && isLandmarksLoaded) ?
-                                <Image
-                                    image={rimImage}
-                                    height={glassesScheme['h'] * faceSize['ratio']}
-                                    width={glassesScheme['w'] * faceSize['ratio']}
-                                    y={glassesScheme['y'] * faceSize['ratio']}
-                                    x={glassesScheme['x'] * faceSize['ratio']}
-                                    rotation={glassesScheme.angle}
+                                    image={faceImage}
+                                    height={faceSize['h']}
+                                    width={faceSize['w']}
                                     opacity={1}
                                 />
-                            : null}
+                                {(linsImage && glassesScheme && isLandmarksLoaded) ?
+                                    <Image
+                                        image={linsImage}
+                                        height={glassesScheme['h'] * faceSize['ratio']}
+                                        width={glassesScheme['w'] * faceSize['ratio']}
+                                        y={glassesScheme['y'] * faceSize['ratio']}
+                                        x={glassesScheme['x'] * faceSize['ratio']}
+                                        rotation={glassesScheme.angle}
+                                        opacity={alpha / (maxAlpha - minAlpha)}
+                                    />
+                                    : null}
+                                {(rimImage && glassesScheme && isLandmarksLoaded) ?
+                                    <Image
+                                        image={rimImage}
+                                        height={glassesScheme['h'] * faceSize['ratio']}
+                                        width={glassesScheme['w'] * faceSize['ratio']}
+                                        y={glassesScheme['y'] * faceSize['ratio']}
+                                        x={glassesScheme['x'] * faceSize['ratio']}
+                                        rotation={glassesScheme.angle}
+                                        opacity={1}
+                                    />
+                                    : null}
 
-                        </Layer>
+                            </Layer>
+                            : null}
+                    </Stage>
                     : null}
-                </Stage>
-                : null}
             </Row>
         </>
     )
