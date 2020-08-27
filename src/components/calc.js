@@ -116,7 +116,7 @@ export const getCoordinates = (positions, {height, width}, glassesNumbers) => {
                     wc = 0.5
                     hc = 0.2
                 } else if (rel >= 1.6666) {
-                    wc = 0.5
+                    wc = 0.45
                     hc = 0.2
                 }
                 return center._x
@@ -130,8 +130,8 @@ export const getCoordinates = (positions, {height, width}, glassesNumbers) => {
                     wc = 0.5
                     hc = 0.5
                 } else if (rel >= 1.6666) {
-                    wc = 0.5
-                    hc = 0.2
+                    wc = 0.45
+                    hc = 0.3
                 }
                 return center._x
                     - wGlasses * Math.cos(angle) * wc
@@ -144,8 +144,8 @@ export const getCoordinates = (positions, {height, width}, glassesNumbers) => {
                     wc = 0.5
                     hc = 0.2
                 } else if (rel >= 1.6666) {
-                    wc = 0.5
-                    hc = 0.2
+                    wc = 0.45
+                    hc = 0.3
                 }
                 return center._x
                     - wGlasses * Math.cos(angle) * wc
@@ -158,7 +158,7 @@ export const getCoordinates = (positions, {height, width}, glassesNumbers) => {
                     wc = 0.5
                     hc = 0.2
                 } else if (rel >= 1.6666) {
-                    wc = 0.5
+                    wc = 0.45
                     hc = 0.2
                 }
                 return center._x
@@ -172,7 +172,7 @@ export const getCoordinates = (positions, {height, width}, glassesNumbers) => {
                     wc = 0.5
                     hc = 0.2
                 } else if (rel >= 1.6666) {
-                    wc = 0.5
+                    wc = 0.45
                     hc = 0.2
                 }
                 return center._x
