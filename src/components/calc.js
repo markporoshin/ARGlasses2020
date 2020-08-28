@@ -101,6 +101,7 @@ export const getCoordinates = (positions, {height, width}, glassesNumbers) => {
                 return center._y
                     - hGlasses * imgCenter * Math.cos(angle) * hc
                     - wGlasses * Math.sin(angle) * wc
+            default:
         }
     }
 
@@ -178,6 +179,7 @@ export const getCoordinates = (positions, {height, width}, glassesNumbers) => {
                 return center._x
                     - wGlasses * Math.cos(angle) * wc
                     + hGlasses * Math.sin(angle) * hc
+            default:
         }
     }
     return {
