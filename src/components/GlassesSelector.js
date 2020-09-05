@@ -16,8 +16,8 @@ class GlassesSelector extends React.Component {
 
     render() {
         let rows = [];
-        glasses.forEach((item, index, __)=>{
-            rows.push({'handle': 
+        glasses.forEach((item, index)=>{
+            rows.push({'handle':
                 <Image src={item} onClick={() => {this.state.glassesCallback(index)}} fluid />
             });
         })

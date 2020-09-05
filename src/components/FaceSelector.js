@@ -30,8 +30,8 @@ class FaceSelector extends React.Component {
 
     render() {
         let rows = [];
-        faces.forEach((item, index, __)=>{
-            rows.push({'handle': 
+        faces.forEach((item, index) =>{
+            rows.push({'handle':
                 <Image onClick={() => {this.state.faceCallback(index)}} src={item} fluid />
             });
         })

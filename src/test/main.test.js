@@ -1,12 +1,12 @@
+import {getCoordinates} from '../components/calc'
+
 const fetch = require('node-fetch');
 const faceApi = require("face-api.js");
 
 const canvas = require("canvas")
 const {Canvas, Image, ImageData} = canvas;
-const fs = require('fs');
 
-
-import {getCoordinates} from '../components/calc'
+const fs = require("fs");
 
 const MODEL_URL = __dirname + '/models'
 

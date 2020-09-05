@@ -74,7 +74,7 @@ const Canvas = (props) => {
     }, [faceImage, isLandmarksLoaded, props.faceImage, props.isModelsLoaded])
 
     useEffect(() => {
-        const loadDecs = async (faceImage) => {
+        const loadDecs = async () => {
             setFaceDetectedFlag(true)
             setFaceDesc(await getLandmarks(props.faceImage))
         }
