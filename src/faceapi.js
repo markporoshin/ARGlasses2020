@@ -19,7 +19,7 @@ export async function loadModels() {
 
 export async function getLandmarks(imageSrc) {
   let img = await faceapi.fetchImage(imageSrc);
-  console.log('face-api start detect face...')
+  console.log('face-api start detect face...');
   let fullDesc = await  faceapi
       .detectAllFaces(img)
       .withFaceLandmarks();

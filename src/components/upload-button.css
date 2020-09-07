@@ -1,0 +1,39 @@
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.btn {
+    border: 2px solid black;
+    color: white;
+    background-color: white;
+    background-image: url("../images/upload-button.png");
+    background-origin: content-box;
+    background-position: 50% 50%;
+    background-repeat:no-repeat;
+    background-size: contain;
+    padding: 8px 20px;
+    font-size: 20px;
+    margin: 2px;
+    content: none;
+    width: 200px;
+    height: 50px;
+}
+
+.upload-btn-wrapper input[type=file] {
+    content: none;
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    color: white;
+    background-color: white;
+    background-image: url("../images/upload-button.png");
+    background-origin: content-box;
+    background-position: 50% 50%;
+    background-repeat:no-repeat;
+    background-size: contain;
+    width: 512px;
+}
