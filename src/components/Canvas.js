@@ -12,7 +12,6 @@ function min(a, b) {
     return a < b ? a : b;
 }
 
-
 function FaceNotDetected({language}) {
     const [isShow, setShowFlag] = useState(true);
 
