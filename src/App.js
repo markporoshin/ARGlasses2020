@@ -27,7 +27,7 @@ const App = () => {
     const faceWasSelected = (faceInd) => {
         setSelectedFaceNumber(faceInd);
         setFace(null);
-    }
+    };
 
     const glassesWasSelected = (glassesInd) => {
         setSelectedGlassesNumber(glassesInd);
@@ -80,6 +80,6 @@ const App = () => {
             </Row>
         </Container>
     );
-}
+};
 
 export default App;

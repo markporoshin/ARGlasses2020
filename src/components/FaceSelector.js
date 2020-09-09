@@ -7,7 +7,7 @@ import './upload-button.css';
 import {faces} from '../resource';
 
 
-const FaceSelector = ({faceLoadedCallback}) => {
+const FaceSelector = ({faceLoadedCallback, faceCallback}) => {
 
     const handleImageChange = (e) => {
         e.preventDefault();
@@ -20,7 +20,7 @@ const FaceSelector = ({faceLoadedCallback}) => {
         };
 
         reader.readAsDataURL(file);
-    }
+    };
 
     return <div style={{height: '100%'}}>
         <div className="upload-btn-wrapper">
@@ -32,9 +32,9 @@ const FaceSelector = ({faceLoadedCallback}) => {
         </div>
         <Table className='table-scroll-y'>
             <MDBTableBody rows={faces.map((item, index) => {return {'handle':
-                    <Image onClick={() => {this.state.faceCallback(index);}} src={item} fluid />}})}/>
+                    <Image onClick={() => faceCallback(index)} src={item} fluid />};})}/>
         </Table>
     </div>;
-}
+};
 
 export default FaceSelector;
