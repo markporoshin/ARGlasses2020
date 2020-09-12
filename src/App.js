@@ -14,10 +14,12 @@ const App = () => {
     const [language, setLanguage] = useState('RU');
     const [uploadedFace, setFace] = useState(undefined);
 
-    useEffect(async()=>{
-        await loadModels().then(() => {
-           toggleModel(true);
-        });
+    useEffect(() => {
+        (async ()=>{
+            await loadModels().then(() => {
+                toggleModel(true);
+            });
+        })().catch((reject) =>console.log(reject));
     }, []);
 
     const faceWasLoaded = (imagePreviewUrl) => {
@@ -31,7 +33,8 @@ const App = () => {
 
     const glassesWasSelected = (glassesInd) => {
         setSelectedGlassesNumber(glassesInd);
-    }
+    };
+
     return (
         <Container fluid>
             <Row>
