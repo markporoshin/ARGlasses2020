@@ -125,7 +125,7 @@ const Canvas = (props) => {
     };
 
     return (
-        <>
+        <div style={{width: '100%', height: '100%'}}>
             {faceImage && faceSize && !isLandmarksLoaded && isFaceDetected !== false &&
             <Button variant="primary" disabled>
                 <Spinner
@@ -156,7 +156,7 @@ const Canvas = (props) => {
                 {container.current &&
                 <Stage
                     height={container.current.clientHeight}
-                    width={container.current.clientWidth * faceSize['k']}
+                    width={container.current.clientWidth}
                     onWheel={handleWheel}
                     draggable
                     onDragStart={dragStart}
@@ -198,7 +198,7 @@ const Canvas = (props) => {
                     </Layer>}
                 </Stage>}
             </div>
-        </>
+        </div>
     );
 };
 

@@ -52,7 +52,7 @@ const App = () => {
             <Row style={{height: '100vh'}}>
                 <div style={{
                     height: '100%',
-                    width: '33%'
+                    width: '20%'
                 }}>
                     <div>
                         <FaceSelector faceCallback={faceWasSelected}
@@ -63,7 +63,7 @@ const App = () => {
 
                 <div style={{
                     height: '100%',
-                    width: '33%'
+                    width: '60%'
                 }}>
                     <Canvas faceImage={uploadedFace ? uploadedFace : faces[selectedFaceNumber]}
                             glassesNumber={selectedGlassesNumber}
@@ -75,7 +75,7 @@ const App = () => {
                 <Col style={{
                     backgroundColor: 'lightblue',
                     height: '100%',
-                    width: '34%'
+                    width: '20%'
                 }}>
                     <GlassesSelector glassesCallback={glassesWasSelected}/>
                 </Col>
