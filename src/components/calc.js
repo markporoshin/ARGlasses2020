@@ -1,33 +1,29 @@
 import {rimsCenter} from '../resource';
 
-export const getCoordinates = (positions, {height, width}, glassesNumbers) => {
-    let leftPoint = positions[36];
-    let rightPoint = positions[45];
+export const getCoordinates = (positions, glassesNumbers) => {
     let center = positions[27];
-    let rel = Math.abs(positions[15].x - positions[35].x) / Math.abs(positions[1].x - positions[35].x);
+    let rel = Math.sqrt(
+            (positions[15].x - positions[35].x) * (positions[15].x - positions[35].x) +
+            (positions[15].y - positions[35].y) * (positions[15].y - positions[35].y)
+        ) / Math.sqrt(
+            (positions[1].x - positions[35].x) * (positions[1].x - positions[35].x) +
+            (positions[1].y - positions[35].y) * (positions[1].y - positions[35].y)
+    );
     const imgCenter = rimsCenter[glassesNumbers];
 
-    const angle = Math.atan((rightPoint._y - leftPoint._y) / (rightPoint._x - leftPoint._x));
+    let angle = Math.atan((positions[36].y - positions[47].y) / (positions[36].x - positions[47].x));
 
     let wGlasses = (() => {
-        if (rel <= 0.6) {
-            return Math.sqrt(
-                (positions[27]._x - positions[0]._x) * (positions[27]._x - positions[0]._x)
-                + (positions[27]._y - positions[0]._y) * (positions[27]._y - positions[0]._y)) * 1.3;
-        } else if (rel >= 1.6666) {
-            return Math.sqrt(
-                (positions[16]._x - positions[27]._x) * (positions[16]._x - positions[27]._x)
-                + (positions[16]._y - positions[27]._y) * (positions[16]._y - positions[27]._y)) * 1.3;
-        } else {
-            return Math.sqrt(
-                (positions[16]._x - positions[0]._x) * (positions[16]._x - positions[0]._x)
-                + (positions[16]._y - positions[0]._y) * (positions[16]._y - positions[0]._y));
-        }
-
+        return Math.sqrt(
+            (positions[16]._x - positions[0]._x) * (positions[16]._x - positions[0]._x)
+            + (positions[16]._y - positions[0]._y) * (positions[16]._y - positions[0]._y));
     })();
-    let hGlasses = height * wGlasses / width;
+    let hGlasses = (() => Math.sqrt(
+            ((positions[21]._y + positions[23]._y)/2 - positions[32]._y) * ((positions[21]._y + positions[23]._y)/2 -  positions[32]._y) +
+            ((positions[21]._x + positions[23]._x)/2 - positions[32]._x) * ((positions[21]._x + positions[23]._x)/2 -  positions[32]._x))
+    )();
 
-    const getY = () => {
+    let yGl = (() => {
         let wc = 0;
         let hc = 0;
         switch (glassesNumbers) {
@@ -35,12 +31,18 @@ export const getCoordinates = (positions, {height, width}, glassesNumbers) => {
                 if (rel > 0.6 && rel < 1.666){
                     wc = 0.35;
                     hc = 1;
-                } else if (rel <= 0.6) {
+                } else if (rel <= 0.6 && rel > 0.2) {
                     wc = 0.5;
                     hc = 0.9;
-                } else if (rel >= 1.6666) {
+                } else if (rel <= 0.2) {
                     wc = 0.5;
                     hc = 0.9;
+                } else if (rel >= 1.6666 && rel <= 2.5) {
+                    wc = 0.5;
+                    hc = 0.9;
+                } else if (rel > 2.5) {
+                    wc = 0.5;
+                    hc = 0.6;
                 }
                 return center._y
                     - hGlasses * imgCenter * Math.cos(angle) * hc
@@ -49,12 +51,18 @@ export const getCoordinates = (positions, {height, width}, glassesNumbers) => {
                 if (rel > 0.6 && rel < 1.666){
                     wc = 0.35;
                     hc = 1;
-                } else if (rel <= 0.6) {
+                } else if (rel <= 0.6 && rel > 0.2) {
                     wc = 0.5;
                     hc = 0.9;
-                } else if (rel >= 1.6666) {
+                } else if (rel <= 0.2) {
                     wc = 0.5;
                     hc = 0.9;
+                } else if (rel >= 1.6666 && rel <= 2.5) {
+                    wc = 0.5;
+                    hc = 0.9;
+                } else if (rel > 2.5) {
+                    wc = 0.5;
+                    hc = 0.7;
                 }
                 return center._y
                     - hGlasses * imgCenter * Math.cos(angle) * hc
@@ -63,10 +71,16 @@ export const getCoordinates = (positions, {height, width}, glassesNumbers) => {
                 if (rel > 0.6 && rel < 1.666) {
                     wc = 0.35;
                     hc = 1;
-                } else if (rel <= 0.6) {
+                } else if (rel <= 0.6 && rel > 0.2) {
                     wc = 0.5;
                     hc = 0.9;
-                } else if (rel >= 1.66666) {
+                } else if (rel <= 0.2) {
+                    wc = 0.5;
+                    hc = 0.9;
+                } else if (rel >= 1.6666 && rel <= 2.5) {
+                    wc = 0.5;
+                    hc = 0.9;
+                } else if (rel > 2.5) {
                     wc = 0.5;
                     hc = 0.9;
                 }
@@ -76,13 +90,19 @@ export const getCoordinates = (positions, {height, width}, glassesNumbers) => {
             case 3:
                 if (rel > 0.6 && rel < 1.666) {
                     wc = 0.35;
-                    hc = 0.9;
-                } else if (rel <= 0.6) {
+                    hc = 1.3;
+                } else if (rel <= 0.6 && rel > 0.2) {
                     wc = 0.5;
-                    hc = 0.9;
-                } else if (rel >= 1.6666) {
+                    hc = 1.3;
+                } else if (rel <= 0.2) {
                     wc = 0.5;
-                    hc = 0.9;
+                    hc = 1.3;
+                } else if (rel >= 1.6666 && rel <= 2.5) {
+                    wc = 0.5;
+                    hc = 1.3;
+                } else if (rel > 2.5) {
+                    wc = 0.5;
+                    hc = 1;
                 }
                 return center._y
                     - hGlasses * imgCenter * Math.cos(angle) * hc
@@ -90,22 +110,27 @@ export const getCoordinates = (positions, {height, width}, glassesNumbers) => {
             case 4:
                 if (rel > 0.6 && rel < 1.666) {
                     wc = 0.35;
-                    hc = 1;
-                } else if (rel <= 0.6) {
+                    hc = 1.5;
+                } else if (rel <= 0.6 && rel > 0.2) {
                     wc = 0.5;
-                    hc = 0.9;
-                } else if (rel >= 1.6666) {
+                    hc = 1.6;
+                } else if (rel <= 0.2) {
                     wc = 0.5;
-                    hc = 0.9;
+                    hc = 1.5;
+                } else if (rel >= 1.6666 && rel <= 3) {
+                    wc = 0.5;
+                    hc = 1.5;
+                } else if (rel > 3) {
+                    wc = 0.5;
+                    hc = 1.3;
                 }
                 return center._y
                     - hGlasses * imgCenter * Math.cos(angle) * hc
                     - wGlasses * Math.sin(angle) * wc;
             default:
         }
-    };
-
-    const getx = () => {
+    })();
+    let xGl = (() => {
         let wc = 0;
         let hc = 0.5;
         switch (glassesNumbers) {
@@ -181,12 +206,85 @@ export const getCoordinates = (positions, {height, width}, glassesNumbers) => {
                     + hGlasses * Math.sin(angle) * hc;
             default:
         }
-    };
+    })();
+
+    console.log('rel');
+    console.log(rel);
+    console.log('angle');
+    console.log(angle);
+
+    (() => {
+        if (rel > 0.6 && rel < 1.666){
+            if (Math.abs(angle) > 0.2) {
+                console.log();
+            }
+            else {
+                console.log();
+            }
+        } else if (rel <= 0.6 && rel > 0.2) {
+            if (Math.abs(angle) > 0.2) {
+                rel = 0.6;
+                wGlasses /= 1.1;
+                xGl += wGlasses * 0.2;
+                hGlasses /= 1.1;
+                yGl += hGlasses * 0.05;
+            }
+            else {
+                rel = 0.6;
+                angle = 0;
+            }
+        } else if (rel <= 0.2) {
+            if (Math.abs(angle) > 0.2) {
+                rel = 0.2;
+                wGlasses /= 1.5;
+                xGl += wGlasses / 3;
+                hGlasses /= 3;
+                yGl -= hGlasses / 3;
+            }
+            else {
+                rel = 2;
+                wGlasses /= 1.2;
+                xGl += wGlasses / 2;
+                hGlasses /= 3;
+                yGl += hGlasses /3;
+            }
+        } else if (rel >= 1.6666 && rel <= 2.5) {
+            if (Math.abs(angle) > 0.2) {
+                wGlasses /= 1.2;
+                xGl += wGlasses * 0.08333333 *2;
+                hGlasses /= 1.2;
+                yGl += hGlasses * 0.08333333;
+            }
+            else {
+                wGlasses /= 1.2;
+                xGl += wGlasses * 0.08333333;
+                hGlasses /= 1.2;
+                yGl += hGlasses * 0.08333333;
+            }
+        } else if (rel > 2.5) {
+            if (Math.abs(angle) > 0.2) {
+                rel = 2.5;
+                wGlasses /= 1.5;
+                xGl += wGlasses / 6;
+                hGlasses /= 1.5;
+                yGl -= hGlasses /3;
+            }
+            else {
+                rel = 2.5;
+                angle = 0;
+                wGlasses /= 1.2;
+                xGl += wGlasses * 0.08333333;
+                hGlasses /= 1.5;
+                yGl += hGlasses / 3;
+            }
+        }
+    })();
     return {
         h: hGlasses,
         w: wGlasses,
-        x: getx(),
-        y: getY(),
-        angle: angle * (180 / Math.PI)
+        x: xGl,
+        y: yGl,
+        angle: angle * (180 / Math.PI),
+        trans: (rel-1)/4
     };
 };

@@ -161,10 +161,7 @@ const Canvas = (props) => {
 
     useEffect(() => {
         if (isLandmarksLoaded && linsImage && rimImage) {
-            setGlassesScheme(getCoordinates(faceDesc[0].landmarks._positions, {
-                height: rimImage.height,
-                width: rimImage.width
-            }, props.glassesNumber));
+            setGlassesScheme(getCoordinates(faceDesc[0].landmarks._positions, props.glassesNumber));
         }
     }, [isLandmarksLoaded, rimImage, linsImage, faceDesc, props.glassesNumber]);
 
