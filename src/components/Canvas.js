@@ -1,7 +1,7 @@
 import {getLandmarks} from '../faceapi';
 import {rims, lins, strings} from '../resource';
 import {Form, Spinner, Button, Alert} from 'react-bootstrap';
-import {Image, Layer, Stage} from 'react-konva';
+import Konva from 'react-konva';
 import InputRange from 'react-input-range';
 import useImage from 'use-image';
 import React, {useEffect, useState, useRef} from 'react';
@@ -35,18 +35,29 @@ function FaceNotDetected({language}) {
 
 const Canvas = (props) => {
     const detecting = strings[props.language]['Detecting'];
+    const linsRef = useRef();
+    const rimsRef = useRef();
 
     const minAlpha = 0;
     const maxAlpha = 10;
 
-
+    const [stageMigrate, setStageMigrate] = useState(1);
     const [faceImage] = useImage(props.faceImage);
     const [faceSize, setFaceSize] = useState({'k': 1});
     const [faceDesc, setFaceDesc] = useState(null);
 
     const [linsImage] = useImage(lins[props.glassesNumber]);
     const [rimImage] = useImage(rims[props.glassesNumber]);
-    const [glassesScheme, setGlassesScheme] = useState(null);
+    const [glassesScheme, setGlassesScheme] = useState({
+        h: 0,
+        w: 0,
+        x: 0,
+        y: 0,
+        angle: 0,
+        trans: 0
+    });
+    const [rimUrl, setRimUrl] = useState(null);
+    const [linUrl, setLinUrl] = useState(null);
 
     const [alpha, setAlpha] = useState(0.5);
 
@@ -57,6 +68,64 @@ const Canvas = (props) => {
     const [scale, setScale] = useState(1);
     const [stageX, setStageX] = useState(0);
     const [stageY, setStageY] = useState(0);
+
+    useEffect(()=>{
+        const transKoef = glassesScheme.trans;
+        // const transKoef = -0.3;
+        if (rimImage) {
+            const image = new Image();
+            image.src = rimImage.src;
+            image.onload = function() {
+                let width = image.width,
+                    height = image.height;
+                let context = rimsRef.current.getContext('2d');
+                rimsRef.current.width = width*2;
+                rimsRef.current.height = height*2;
+                for (var i = 0; i <= height / 2; ++i) {
+                    context.setTransform(1, -transKoef * i / height,
+                        transKoef * i / height, 1, 0, 60);
+                    context.drawImage(image,
+                        0, height / 2 - i, width, 2,
+                        0, height / 2 - i, width, 2);
+                    context.setTransform(1, transKoef * i / height,
+                        -transKoef * i / height, 1, 0, 60);
+                    context.drawImage(image,
+                        0, height / 2 + i, width, 2,
+                        0, height / 2 + i, width, 2);
+                }
+            };
+            setRimUrl(rimsRef.current);
+        }
+        if (linsImage){
+            const image = new Image();
+            image.src = linsImage.src;
+            image.onload = function() {
+                let width = image.width,
+                    height = image.height;
+                console.log(width);
+                let context = linsRef.current.getContext('2d');
+                linsRef.current.width = width*2;
+                linsRef.current.height = height*2;
+                for (var i = 0; i <= height / 2; ++i) {
+                    context.setTransform(1, -transKoef * i / height,
+                        transKoef * i / height, 1, 0, 60);
+                    context.drawImage(image,
+                        0, height / 2 - i, width, 2,
+                        0, height / 2 - i, width, 2);
+                    context.setTransform(1, transKoef * i / height,
+                        -transKoef * i / height, 1, 0, 60);
+                    context.drawImage(image,
+                        0, height / 2 + i, width, 2,
+                        0, height / 2 + i, width, 2);
+                }
+            };
+            setLinUrl(linsRef.current);
+        }
+        setStageX(stageX+stageMigrate);
+        setStageY(stageY+stageMigrate);
+        setStageMigrate(-stageMigrate);
+
+    },[glassesScheme, rimImage/*, linsImage, glassesScheme, linUrl, rimUrl*/]);
 
     useEffect(() => {
         if (faceImage) {
@@ -116,8 +185,7 @@ const Canvas = (props) => {
         setStageY(-(mousePointTo.y - stage.getPointerPosition().y / newScale) * newScale);
     };
 
-    const dragStart = () => {
-    };
+    const dragStart = () => {};
 
     const dragEnd = e => {
         setStageX(e.target.x());
@@ -126,6 +194,22 @@ const Canvas = (props) => {
 
     return (
         <div style={{width: '100%', height: '100%'}}>
+            <canvas
+                style={{
+                    position: 'absolute',
+                    visibility: 'hidden'
+                    // border: "red solid"
+                }}
+                ref={rimsRef}
+            />
+            <canvas
+                style={{
+                    position: 'absolute',
+                    visibility: 'hidden'
+                    // border: "red solid"
+                }}
+                ref={linsRef}
+            />
             {faceImage && faceSize && !isLandmarksLoaded && isFaceDetected !== false &&
             <Button variant="primary" disabled>
                 <Spinner
@@ -154,7 +238,7 @@ const Canvas = (props) => {
             </div>
             <div style={{width: '100%', height: '90%'}} ref={container}>
                 {container.current &&
-                <Stage
+                <Konva.Stage
                     height={container.current.clientHeight}
                     width={container.current.clientWidth}
                     onWheel={handleWheel}
@@ -168,35 +252,37 @@ const Canvas = (props) => {
                     y={stageY}
                 >
                     {faceImage && faceSize &&
-                    <Layer>
-                        <Image
+                    <Konva.Layer>
+                        <Konva.Image
                             image={faceImage}
                             height={faceSize['h']}
                             width={faceSize['w']}
                             opacity={1}
                         />
-                        {linsImage && glassesScheme && isLandmarksLoaded &&
-                        <Image
-                            image={linsImage}
-                            height={glassesScheme['h'] * faceSize['ratio']}
-                            width={glassesScheme['w'] * faceSize['ratio']}
+                        {linUrl && glassesScheme && isLandmarksLoaded &&
+                        <Konva.Image
+                            image={linUrl}
+                            height={glassesScheme['h'] * faceSize['ratio']*2}
+                            width={glassesScheme['w'] * faceSize['ratio']*2}
                             y={glassesScheme['y'] * faceSize['ratio']}
                             x={glassesScheme['x'] * faceSize['ratio']}
                             rotation={glassesScheme.angle}
                             opacity={alpha / (maxAlpha - minAlpha)}
                         />}
-                        {rimImage && glassesScheme && isLandmarksLoaded &&
-                        <Image
-                            image={rimImage}
-                            height={glassesScheme['h'] * faceSize['ratio']}
-                            width={glassesScheme['w'] * faceSize['ratio']}
+                        {rimUrl && glassesScheme && isLandmarksLoaded &&
+                        <Konva.Image
+                            // image={rimImage}
+                            image={rimUrl}
+                            // image={canvasRef.current}
+                            height={glassesScheme['h'] * faceSize['ratio']*2}
+                            width={glassesScheme['w'] * faceSize['ratio']*2}
                             y={glassesScheme['y'] * faceSize['ratio']}
                             x={glassesScheme['x'] * faceSize['ratio']}
                             rotation={glassesScheme.angle}
                             opacity={1}
                         />}
-                    </Layer>}
-                </Stage>}
+                    </Konva.Layer>}
+                </Konva.Stage>}
             </div>
         </div>
     );
