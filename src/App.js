@@ -19,41 +19,34 @@ const App = () => {
             await loadModels().then(() => {
                 toggleModel(true);
             });
-        })().catch((reject) =>console.log(reject));
+        })().catch((reject) => console.log(reject));
     }, []);
 
-    const faceWasLoaded = (imagePreviewUrl) => {
-        setFace(imagePreviewUrl);
-    };
+    const faceWasLoaded = (imagePreviewUrl) => setFace(imagePreviewUrl);
 
     const faceWasSelected = (faceInd) => {
         setSelectedFaceNumber(faceInd);
         setFace(null);
     };
 
-    const glassesWasSelected = (glassesInd) => {
-        setSelectedGlassesNumber(glassesInd);
-    };
+    const glassesWasSelected = (glassesInd) => setSelectedGlassesNumber(glassesInd);
 
     return (
         <Container fluid>
             <Row>
                 <Col sm={2}>
                     <Pagination>
-                        <Pagination.Item active={language === 'RU'} onClick={() => {
-                            setLanguage('EN');
-                        }}>Русский</Pagination.Item>
                         <Pagination.Item active={language === 'EN'} onClick={() => {
-                            setLanguage('RU');
+                            setLanguage('EN');
                         }}>English</Pagination.Item>
+                        <Pagination.Item active={language === 'RU'} onClick={() => {
+                            setLanguage('RU');
+                        }}>Русский</Pagination.Item>
                     </Pagination>
                 </Col>
             </Row>
-            <Row style={{height: '100vh'}}>
-                <div style={{
-                    height: '100%',
-                    width: '20%'
-                }}>
+            <Row style={{ height: '100vh' }}>
+                <div style={{ height: '100%', width: '20%' }}>
                     <div>
                         <FaceSelector faceCallback={faceWasSelected}
                                       faceLoadedCallback={faceWasLoaded}
@@ -61,10 +54,7 @@ const App = () => {
                     </div>
                 </div>
 
-                <div style={{
-                    height: '100%',
-                    width: '60%'
-                }}>
+                <div style={{ height: '100%', width: '60%' }}>
                     <Canvas faceImage={uploadedFace ? uploadedFace : faces[selectedFaceNumber]}
                             glassesNumber={selectedGlassesNumber}
                             isModelsLoaded={isModelsLoaded}
@@ -72,11 +62,7 @@ const App = () => {
                     />
                 </div>
 
-                <Col style={{
-                    backgroundColor: 'lightblue',
-                    height: '100%',
-                    width: '20%'
-                }}>
+                <Col style={{ backgroundColor: 'lightblue', height: '100%', width: '20%' }}>
                     <GlassesSelector glassesCallback={glassesWasSelected}/>
                 </Col>
 

@@ -8,32 +8,21 @@ import React, {useEffect, useState, useRef} from 'react';
 import 'react-input-range/lib/css/index.css';
 import {getCoordinates} from './calc';
 
-function min(a, b) {
-    return a < b ? a : b;
-}
-
 function FaceNotDetected({language}) {
     const [isShow, setShowFlag] = useState(true);
 
     const header = strings[language]['ohSnap'];
     const body = strings[language]['faceNotDetectedError'];
 
-    if (isShow)
-        return (
-            <Alert variant="danger" onClose={() => {
-                setShowFlag(false);
-            }} dismissible>
+    return isShow
+        ? (<Alert variant="danger" onClose={() => { setShowFlag(false);}} dismissible>
                 <Alert.Heading>{header}</Alert.Heading>
-                <p>
-                    {body}
-                </p>
-            </Alert>
-        );
-    return null;
+                <p>{body}</p>
+            </Alert>)
+        : null;
 }
 
-
-const Canvas = (props) => {
+const Canvas = props => {
     const detecting = strings[props.language]['Detecting'];
     const linsRef = useRef();
     const rimsRef = useRef();
@@ -48,14 +37,7 @@ const Canvas = (props) => {
 
     const [linsImage] = useImage(lins[props.glassesNumber]);
     const [rimImage] = useImage(rims[props.glassesNumber]);
-    const [glassesScheme, setGlassesScheme] = useState({
-        h: 0,
-        w: 0,
-        x: 0,
-        y: 0,
-        angle: 0,
-        trans: 0
-    });
+    const [glassesScheme, setGlassesScheme] = useState({ h: 0, w: 0, x: 0, y: 0, angle: 0, trans: 0 });
     const [rimUrl, setRimUrl] = useState(null);
     const [linUrl, setLinUrl] = useState(null);
 
@@ -71,7 +53,6 @@ const Canvas = (props) => {
 
     useEffect(()=>{
         const transKoef = glassesScheme.trans;
-        // const transKoef = -0.3;
         if (rimImage) {
             const image = new Image();
             image.src = rimImage.src;
@@ -102,7 +83,6 @@ const Canvas = (props) => {
             image.onload = function() {
                 let width = image.width,
                     height = image.height;
-                console.log(width);
                 let context = linsRef.current.getContext('2d');
                 linsRef.current.width = width*2;
                 linsRef.current.height = height*2;
@@ -124,12 +104,12 @@ const Canvas = (props) => {
         setStageX(stageX+stageMigrate);
         setStageY(stageY+stageMigrate);
         setStageMigrate(-stageMigrate);
-
-    },[glassesScheme, rimImage/*, linsImage, glassesScheme, linUrl, rimUrl*/]);
+        // eslint-disable-next-line
+    },[glassesScheme, rimImage]);
 
     useEffect(() => {
         if (faceImage) {
-            const ratio = min(container.current.clientHeight / faceImage.height, container.current.clientWidth / faceImage.width);
+            const ratio = Math.min(container.current.clientHeight / faceImage.height, container.current.clientWidth / faceImage.width);
             setFaceSize({
                 'h': faceImage.height * ratio,
                 'w': faceImage.width * ratio,
@@ -195,7 +175,6 @@ const Canvas = (props) => {
                 style={{
                     position: 'absolute',
                     visibility: 'hidden'
-                    // border: "red solid"
                 }}
                 ref={rimsRef}
             />
@@ -203,7 +182,6 @@ const Canvas = (props) => {
                 style={{
                     position: 'absolute',
                     visibility: 'hidden'
-                    // border: "red solid"
                 }}
                 ref={linsRef}
             />
@@ -218,8 +196,7 @@ const Canvas = (props) => {
                 />
                 {detecting}
             </Button>}
-            {isFaceDetected === false &&
-            <FaceNotDetected language={props.language}/>}
+            {isFaceDetected === false && <FaceNotDetected language={props.language}/>}
             <div style={{width: '100%', height: '10%'}}>
                 <Form style={{
                     width: '90%',
@@ -242,7 +219,6 @@ const Canvas = (props) => {
                     draggable
                     onDragStart={dragStart}
                     onDragEnd={dragEnd}
-
                     scaleX={scale}
                     scaleY={scale}
                     x={stageX}
@@ -268,9 +244,7 @@ const Canvas = (props) => {
                         />}
                         {rimUrl && glassesScheme && isLandmarksLoaded &&
                         <Konva.Image
-                            // image={rimImage}
                             image={rimUrl}
-                            // image={canvasRef.current}
                             height={glassesScheme['h'] * faceSize['ratio']*2}
                             width={glassesScheme['w'] * faceSize['ratio']*2}
                             y={glassesScheme['y'] * faceSize['ratio']}
