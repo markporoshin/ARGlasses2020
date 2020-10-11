@@ -210,11 +210,6 @@ export const getCoordinates = (positions, glassesNumbers) => {
         }
     })();
 
-    console.log('rel');
-    console.log(rel);
-    console.log('angle');
-    console.log(angle);
-
     (() => {
         if (rel > 0.6 && rel < 1.666){
             switch (glassesNumbers){
