@@ -128,6 +128,7 @@ export const getCoordinates = (positions, glassesNumbers) => {
                     - hGlasses * imgCenter * Math.cos(angle) * hc
                     - wGlasses * Math.sin(angle) * wc;
             default:
+                break;
         }
     })();
     let xGl = (() => {
@@ -205,6 +206,7 @@ export const getCoordinates = (positions, glassesNumbers) => {
                     - wGlasses * Math.cos(angle) * wc
                     + hGlasses * Math.sin(angle) * hc;
             default:
+                break;
         }
     })();
 
@@ -215,33 +217,299 @@ export const getCoordinates = (positions, glassesNumbers) => {
 
     (() => {
         if (rel > 0.6 && rel < 1.666){
-            if (Math.abs(angle) > 0.2) {
-                console.log();
-            }
-            else {
-                console.log();
+            switch (glassesNumbers){
+                case 0:
+                    if (Math.abs(angle) > 0.6) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.1;
+                        hGlasses /= 1.1;
+                        yGl -= hGlasses * 0.1;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += angle > 0 ? wGlasses * 0.1 : -wGlasses * 0.1;
+                        hGlasses /= 1.1;
+                        yGl -= hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.05;
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.2){
+                        rel = 0.6;
+                        angle = 0;
+                    }
+                    break;
+                case 1:
+                    if (Math.abs(angle) > 0.6) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.1;
+                        hGlasses /= 1.1;
+                        yGl -= hGlasses * 0.1;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += angle > 0 ? wGlasses * 0.1 : -wGlasses * 0.1;
+                        hGlasses /= 1.1;
+                        yGl -= hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.05;
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.2){
+                        rel = 0.6;
+                        angle = 0;
+                    }
+                    break;
+                case 2:
+                    if (Math.abs(angle) > 0.6) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.1;
+                        hGlasses /= 1.1;
+                        yGl -= hGlasses * 0.1;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += angle > 0 ? wGlasses * 0.1 : -wGlasses * 0.1;
+                        hGlasses /= 1.1;
+                        yGl -= hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.05;
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.2){
+                        rel = 0.6;
+                        angle = 0;
+                    }
+                    break;
+                case 3:
+                    if (Math.abs(angle) > 0.6) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.1;
+                        hGlasses /= 1.1;
+                        yGl -= hGlasses * 0.1;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += angle > 0 ? wGlasses * 0.1 : -wGlasses * 0.1;
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += angle > 0 ? wGlasses * 0.1 : -wGlasses * 0.01;
+                        hGlasses /= 1.1;
+                        yGl -= hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.2){
+                        rel = 0.6;
+                        angle = 0;
+                    }
+                    break;
+                case 4:
+                    if (Math.abs(angle) > 0.6) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.1;
+                        hGlasses /= 1.1;
+                        yGl -= hGlasses * 0.1;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.05;
+                        hGlasses /= 1.1;
+                        yGl -= hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.05;
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.2){
+                        rel = 0.6;
+                        angle = 0;
+                    }
+                    break;
+                default:
+                    break;
             }
         } else if (rel <= 0.6 && rel > 0.2) {
-            if (Math.abs(angle) > 0.2) {
-                rel = 0.6;
-                wGlasses /= 1.1;
-                xGl += wGlasses * 0.2;
-                hGlasses /= 1.1;
-                yGl += hGlasses * 0.05;
-            }
-            else {
-                rel = 0.6;
-                angle = 0;
+            switch (glassesNumbers){
+                case 0:
+                    if (Math.abs(angle) > 0.6) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.2;
+                        hGlasses /= 1.1;
+                        yGl -= hGlasses * 0.1;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl -= wGlasses * 0.1;
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.1 * Math.sign(angle);
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.01;
+                    }
+                    else if (Math.abs(angle) <= 0.2){
+                        rel = 0.6;
+                        xGl += -wGlasses * 0.05 * Math.sign(angle);
+                        angle = 0;
+                    }
+                    break;
+                case 1:
+                    if (Math.abs(angle) > 0.6) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.2;
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.2;
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.05 * Math.sign(angle);
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.01;
+                    }
+                    else if (Math.abs(angle) <= 0.2){
+                        xGl += -wGlasses * 0.05 * Math.sign(angle);
+                        rel = 0.6;
+                        angle = 0;
+                    }
+                    break;
+                case 2:
+                    if (Math.abs(angle) > 0.6) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.2;
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.2;
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.1 * Math.sign(angle);
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.2) {
+                        xGl += -wGlasses * 0.05 * Math.sign(angle);
+                        rel = 0.6;
+                        angle = 0;
+                    }
+                    break;
+                case 3:
+                    if (Math.abs(angle) > 0.6) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.2 * Math.sign(angle);
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.2 * Math.sign(angle);
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.1 * Math.sign(angle);
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.2){
+                        xGl += -wGlasses * 0.05 * Math.sign(angle);
+                        rel = 0.6;
+                        angle = 0;
+                    }
+                    break;
+                case 4:
+                    if (Math.abs(angle) > 0.3) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.1 * Math.sign(angle);
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.3 && Math.abs(angle) > 0.2) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += wGlasses * 0.2;
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.2){
+                        xGl += -wGlasses * 0.05 * Math.sign(angle);
+                        rel = 0.6;
+                        angle = 0;
+                    }
+                    break;
+                default:
+                    break;
             }
         } else if (rel <= 0.2) {
-            if (Math.abs(angle) > 0.2) {
+            if (Math.abs(angle) > 0.3){
                 rel = 0.2;
                 wGlasses /= 1.5;
                 xGl += wGlasses / 3;
                 hGlasses /= 3;
                 yGl -= hGlasses / 3;
             }
-            else {
+            else if (Math.abs(angle) > 0.2 && Math.abs(angle) <= 0.3) {
+                rel = 0.2;
+                wGlasses /= 1.5;
+                xGl += wGlasses / 3;
+                hGlasses /= 3;
+                yGl -= hGlasses / 3;
+            }
+            else if (Math.abs(angle) <= 0.2){
                 rel = 2;
                 wGlasses /= 1.2;
                 xGl += wGlasses / 2;
@@ -249,33 +517,294 @@ export const getCoordinates = (positions, glassesNumbers) => {
                 yGl += hGlasses /3;
             }
         } else if (rel >= 1.6666 && rel <= 2.5) {
-            if (Math.abs(angle) > 0.2) {
-                wGlasses /= 1.2;
-                xGl += wGlasses * 0.08333333 *2;
-                hGlasses /= 1.2;
-                yGl += hGlasses * 0.08333333;
-            }
-            else {
-                wGlasses /= 1.2;
-                xGl += wGlasses * 0.08333333;
-                hGlasses /= 1.2;
-                yGl += hGlasses * 0.08333333;
+            switch (glassesNumbers)  {
+                case 0:
+                    if (Math.abs(angle) > 0.6) {
+                        wGlasses /= 1.2;
+                        xGl += angle > 0 ? wGlasses * 0.08333333 * 2 : -wGlasses * 0.1;
+                        hGlasses /= 1.2;
+                        yGl += hGlasses * 0.01;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        wGlasses /= 1.2;
+                        xGl += wGlasses * 0.08333333 *2;
+                        hGlasses /= 1.2;
+                        yGl += hGlasses * 0.08333333;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        wGlasses /= 1.2;
+                        xGl += wGlasses * 0.08333333 *2;
+                        hGlasses /= 1.2;
+                        yGl += hGlasses * 0.08333333;
+                    }
+                    else if (Math.abs(angle) <= 0.2) {
+                        wGlasses /= 1.2;
+                        xGl += angle > 0 ? wGlasses * 0.01 : wGlasses * 0.01;
+                        hGlasses /= 1.2;
+                        yGl += hGlasses * 0.08333333;
+                    }
+                    break;
+                case 1:
+                    if (Math.abs(angle) > 0.6) {
+                        wGlasses /= 1.2;
+                        xGl += angle > 0 ? wGlasses * 0.08333333 * 2 : -wGlasses * 0.1;
+                        hGlasses *= 1.2;
+                        yGl -= hGlasses * 0.2;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        wGlasses /= 1.2;
+                        xGl += wGlasses * 0.08333333 *2;
+                        hGlasses /= 1.2;
+                        yGl += hGlasses * 0.08333333;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        wGlasses /= 1.2;
+                        xGl += angle > 0 ? wGlasses * 0.01 : -wGlasses * 0.01;
+                        hGlasses /= 1.2;
+                        yGl += hGlasses * 0.08333333;
+                    }
+                    else if (Math.abs(angle) <= 0.2){
+                        wGlasses /= 1.2;
+                        xGl += angle > 0 ? wGlasses * 0.01 : wGlasses * 0.01;
+                        hGlasses /= 1.2;
+                        yGl += hGlasses * 0.05;
+                    }
+                    break;
+                case 2:
+                    if (Math.abs(angle) > 0.6) {
+                        wGlasses /= 1.2;
+                        xGl += angle > 0 ? wGlasses * 0.08333333 * 2 : -wGlasses * 0.08333333;
+                        hGlasses /= 1.2;
+                        yGl -= hGlasses * 0.5;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        wGlasses /= 1.2;
+                        xGl += wGlasses * 0.08333333 *2;
+                        hGlasses /= 1.2;
+                        yGl += hGlasses * 0.08333333;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        wGlasses /= 1.2;
+                        xGl += wGlasses * 0.08333333 *2;
+                        hGlasses /= 1.2;
+                        yGl += hGlasses * 0.08333333;
+                    }
+                    else if (Math.abs(angle) <= 0.2){
+                        wGlasses /= 1.2;
+                        xGl += angle > 0 ? wGlasses * 0.01 : wGlasses * 0.01;
+                        hGlasses /= 1.2;
+                        yGl += hGlasses * 0.08333333;
+                    }
+                    break;
+                case 3:
+                    if (Math.abs(angle) > 0.6) {
+                        wGlasses /= 1.2;
+                        xGl += angle > 0 ? wGlasses * 0.08333333 * 2 : -wGlasses * 0.1;
+                        hGlasses /= 1.2;
+                        yGl += hGlasses * 0.01;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        wGlasses /= 1.2;
+                        xGl += wGlasses * 0.08333333 *2;
+                        hGlasses /= 1.2;
+                        yGl += hGlasses * 0.08333333;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        wGlasses /= 1.2;
+                        xGl += wGlasses * 0.08333333 *2;
+                        hGlasses /= 1.2;
+                        yGl += hGlasses * 0.08333333;
+                    }
+                    else if (Math.abs(angle) <= 0.2){
+                        wGlasses /= 1.2;
+                        xGl += angle > 0 ? wGlasses * 0.1 : wGlasses * 0.1;
+                        hGlasses /= 1.2;
+                        yGl += hGlasses * 0.08333333;
+                    }
+                    break;
+                case 4:
+                    if (Math.abs(angle) > 0.6) {
+                        wGlasses /= 1.2;
+                        xGl += angle > 0 ? wGlasses * 0.08333333 * 2 : 0;
+                        hGlasses /= 1.2;
+                        yGl += hGlasses * 0.01;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        wGlasses /= 1.2;
+                        xGl += wGlasses * 0.08333333 *2;
+                        hGlasses /= 1.2;
+                        yGl += hGlasses * 0.08333333;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        wGlasses /= 1.2;
+                        xGl += wGlasses * 0.08333333 *2;
+                        hGlasses /= 1.2;
+                        yGl += hGlasses * 0.08333333;
+                    }
+                    else if (Math.abs(angle) <= 0.2){
+                        wGlasses /= 1.2;
+                        xGl += angle > 0 ? wGlasses * 0.1 : wGlasses * 0.1;
+                        hGlasses /= 1.2;
+                        yGl += hGlasses * 0.08333333;
+                    }
+                    break;
+                default:
+                    break;
             }
         } else if (rel > 2.5) {
-            if (Math.abs(angle) > 0.2) {
-                rel = 2.5;
-                wGlasses /= 1.5;
-                xGl += wGlasses / 6;
-                hGlasses /= 1.5;
-                yGl -= hGlasses /3;
-            }
-            else {
-                rel = 2.5;
-                angle = 0;
-                wGlasses /= 1.2;
-                xGl += wGlasses * 0.08333333;
-                hGlasses /= 1.5;
-                yGl += hGlasses / 3;
+            switch (glassesNumbers)  {
+                case 0:
+                    if (Math.abs(angle) > 0.6) {
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses /3;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses /3;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses /3;
+                    }
+                    else if (Math.abs(angle) <= 0.2){
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses /6;
+                    }
+                    break;
+                case 1:
+                    if (Math.abs(angle) > 0.6) {
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses /3;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses /3;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses /3;
+                    }
+                    else if (Math.abs(angle) <= 0.2){
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses / 6;
+                    }
+                    break;
+                case 2:
+                    if (Math.abs(angle) > 0.6) {
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses /3;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses /3;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses / 3;
+                    }
+                    else if (Math.abs(angle) <= 0.2){
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses / 6;
+                    }
+                    break;
+                case 3:
+                    if (Math.abs(angle) > 0.6) {
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses / 3;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses / 3;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses / 3;
+                    }
+                    else if (Math.abs(angle) <= 0.2){
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses / 6;
+                    }
+                    break;
+                case 4:
+                    if (Math.abs(angle) > 0.6) {
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses /3;
+                    }
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses /3;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses /3;
+                    }
+                    else if (Math.abs(angle) <= 0.2){
+                        rel = 2.5;
+                        wGlasses /= 1.5;
+                        xGl += wGlasses / 6;
+                        hGlasses /= 1.5;
+                        yGl -= hGlasses / 6;
+                    }
+                    break;
+                default:
+                    break;
             }
         }
     })();
