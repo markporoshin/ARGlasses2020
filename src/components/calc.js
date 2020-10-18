@@ -226,12 +226,12 @@ export const getCoordinates = (positions, glassesNumbers) => {
                         wGlasses /= 1.1;
                         xGl += angle > 0 ? wGlasses * 0.15 : -wGlasses * 0.05;
                         hGlasses /= 1.1;
-                        yGl -= hGlasses * 0.05;
+                        yGl -= angle > 0 ? hGlasses * 0.05 : -hGlasses * 0.03;
                     }
                     else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
                         rel = 0.6;
                         wGlasses /= 1.1;
-                        xGl += angle > 0 ? wGlasses * 0.12 : -wGlasses * 0.1;
+                        xGl += angle > 0 ? wGlasses * 0.12 : wGlasses * 0.03;
                         hGlasses /= 1.1;
                         yGl -= hGlasses * 0.05;
                     }
@@ -253,14 +253,14 @@ export const getCoordinates = (positions, glassesNumbers) => {
                         wGlasses /= 1.1;
                         xGl += angle > 0 ? wGlasses * 0.1 : -wGlasses * 0.01;
                         hGlasses /= 1.1;
-                        yGl -= hGlasses * 0.05;
+                        yGl -= angle > 0 ? hGlasses * 0.05 : -hGlasses * 0.03;
                     }
                     else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
                         rel = 0.6;
                         wGlasses /= 1.1;
-                        xGl += angle > 0 ? wGlasses * 0.12 : -wGlasses * 0.1;
+                        xGl += angle > 0 ? wGlasses * 0.12 : wGlasses * 0.03;
                         hGlasses /= 1.1;
-                        yGl -= hGlasses * 0.05;
+                        yGl -= angle > 0 ? hGlasses * 0.05 : hGlasses * 0.03;
                     }
                     else if (Math.abs(angle) <= 0.2){
                         rel = 0.6;
@@ -280,14 +280,14 @@ export const getCoordinates = (positions, glassesNumbers) => {
                         wGlasses /= 1.1;
                         xGl += angle > 0 ? wGlasses * 0.1 : -wGlasses * 0.05;
                         hGlasses /= 1.1;
-                        yGl -= hGlasses * 0.09;
+                        yGl -= angle > 0 ? hGlasses * 0.09 : -hGlasses * 0.03;
                     }
                     else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
                         rel = 0.6;
                         wGlasses /= 1.1;
                         xGl += wGlasses * 0.05;
                         hGlasses /= 1.1;
-                        yGl += hGlasses * 0.05;
+                        yGl -= angle > 0 ? hGlasses * 0.05 : -hGlasses * 0.03;
                     }
                     else if (Math.abs(angle) <= 0.2){
                         rel = 0.6;
@@ -307,7 +307,7 @@ export const getCoordinates = (positions, glassesNumbers) => {
                         wGlasses /= 1.1;
                         xGl += angle > 0 ? wGlasses * 0.15 : -wGlasses * 0.05;
                         hGlasses /= 1.1;
-                        yGl -= hGlasses * 0.05;
+                        yGl -= angle > 0 ? hGlasses * 0.09 : -hGlasses * 0.02;
                     }
                     else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
                         rel = 0.6;
@@ -334,18 +334,19 @@ export const getCoordinates = (positions, glassesNumbers) => {
                         wGlasses /= 1.1;
                         xGl += angle > 0 ? wGlasses * 0.09 : -wGlasses * 0.1;
                         hGlasses /= 1.1;
-                        yGl -= hGlasses * 0.17;
+                        yGl -= angle > 0 ? hGlasses * 0.17 : -hGlasses * 0.02;
                     }
                     else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
                         rel = 0.6;
                         wGlasses /= 1.1;
-                        xGl += angle > 0 ? wGlasses * 0.12 : -wGlasses * 0.1;
+                        xGl += angle > 0 ? wGlasses * 0.12 : wGlasses * 0.1;
                         hGlasses /= 1.1;
-                        yGl -= hGlasses * 0.07;
+                        yGl -= angle > 0 ? hGlasses * 0.07 : -hGlasses * 0.02;
                     }
                     else if (Math.abs(angle) <= 0.2){
                         rel = 0.6;
                         angle = 0;
+                        yGl -= angle > 0 ? hGlasses * 0.12 : hGlasses * 0.12;
                     }
                     break;
                 default:
@@ -379,6 +380,7 @@ export const getCoordinates = (positions, glassesNumbers) => {
                         rel = 0.6;
                         xGl += -wGlasses * 0.05 * Math.sign(angle);
                         angle = 0;
+                        yGl += -hGlasses * 0.2;
                     }
                     break;
                 case 1:
@@ -407,6 +409,7 @@ export const getCoordinates = (positions, glassesNumbers) => {
                         xGl += -wGlasses * 0.05 * Math.sign(angle);
                         rel = 0.6;
                         angle = 0;
+                        yGl += -hGlasses * 0.2;
                     }
                     break;
                 case 2:
@@ -427,14 +430,15 @@ export const getCoordinates = (positions, glassesNumbers) => {
                     else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
                         rel = 0.6;
                         wGlasses /= 1.1;
-                        xGl += wGlasses * 0.1 * Math.sign(angle);
+                        xGl += angle > 0 ? wGlasses * 0.1 : wGlasses * 0.1;
                         hGlasses /= 1.1;
-                        yGl += hGlasses * 0.05;
+                        yGl -= angle > 0 ? hGlasses * 0.1 : hGlasses * 0.1;
                     }
                     else if (Math.abs(angle) <= 0.2) {
                         xGl += -wGlasses * 0.05 * Math.sign(angle);
                         rel = 0.6;
                         angle = 0;
+                        yGl += -hGlasses * 0.2;
                     }
                     break;
                 case 3:
@@ -463,20 +467,28 @@ export const getCoordinates = (positions, glassesNumbers) => {
                         xGl += -wGlasses * 0.05 * Math.sign(angle);
                         rel = 0.6;
                         angle = 0;
+                        yGl += -hGlasses * 0.1;
                     }
                     break;
                 case 4:
-                    if (Math.abs(angle) > 0.3) {
+                    if (Math.abs(angle) > 0.6) {
                         rel = 0.6;
                         wGlasses /= 1.1;
                         xGl += wGlasses * 0.1 * Math.sign(angle);
                         hGlasses /= 1.1;
                         yGl += hGlasses * 0.05;
                     }
-                    else if (Math.abs(angle) <= 0.3 && Math.abs(angle) > 0.2) {
+                    else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
                         rel = 0.6;
                         wGlasses /= 1.1;
                         xGl += wGlasses * 0.2;
+                        hGlasses /= 1.1;
+                        yGl += hGlasses * 0.05;
+                    }
+                    else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
+                        rel = 0.6;
+                        wGlasses /= 1.1;
+                        xGl += angle > 0 ? wGlasses * 0.1 : wGlasses * 0.2;
                         hGlasses /= 1.1;
                         yGl += hGlasses * 0.05;
                     }
@@ -484,6 +496,7 @@ export const getCoordinates = (positions, glassesNumbers) => {
                         xGl += -wGlasses * 0.05 * Math.sign(angle);
                         rel = 0.6;
                         angle = 0;
+                        yGl += -hGlasses * 0.12;
                     }
                     break;
                 default:
