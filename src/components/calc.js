@@ -209,7 +209,6 @@ export const getCoordinates = (positions, glassesNumbers) => {
                 break;
         }
     })();
-
     (() => {
         if (rel > 0.6 && rel < 1.666){
             switch (glassesNumbers){
@@ -537,7 +536,7 @@ export const getCoordinates = (positions, glassesNumbers) => {
                     }
                     else if (Math.abs(angle) <= 0.2) {
                         wGlasses /= 1.2;
-                        xGl += angle > 0 ? wGlasses * 0.01 : wGlasses * 0.01;
+                        xGl += angle > 0 ? wGlasses * 0.07 : wGlasses * 0.01;
                         hGlasses /= 1.2;
                         yGl += hGlasses * 0.08333333;
                     }
@@ -563,7 +562,7 @@ export const getCoordinates = (positions, glassesNumbers) => {
                     }
                     else if (Math.abs(angle) <= 0.2){
                         wGlasses /= 1.2;
-                        xGl += angle > 0 ? wGlasses * 0.01 : wGlasses * 0.01;
+                        xGl += angle > 0 ? wGlasses * 0.07 : wGlasses * 0.01;
                         hGlasses /= 1.2;
                         yGl += hGlasses * 0.05;
                     }
@@ -589,9 +588,9 @@ export const getCoordinates = (positions, glassesNumbers) => {
                     }
                     else if (Math.abs(angle) <= 0.2){
                         wGlasses /= 1.2;
-                        xGl += angle > 0 ? wGlasses * 0.01 : wGlasses * 0.01;
+                        xGl += angle > 0 ? wGlasses * 0.08 : wGlasses * 0.01;
                         hGlasses /= 1.2;
-                        yGl += hGlasses * 0.08333333;
+                        yGl += hGlasses * 0.01;
                     }
                     break;
                 case 3:

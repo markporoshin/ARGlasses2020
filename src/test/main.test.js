@@ -26,7 +26,8 @@ const dif = {
     'w': 20,
     'x': 20,
     'y': 20,
-    'angle': 4
+    'angle': 4,
+    'trans': 0.1
 };
 
 describe('photos', () => {
@@ -39,8 +40,7 @@ describe('photos', () => {
         });
         describe.each(glassesNumbers)('glassNumber %s', (num)=>{
             test('compare', async()=>{
-                const testobj = dataset[photo][num];
-                const coordinates = getCoordinates(pos, {height: testobj.height, width: testobj.width}, +num);
+                const coordinates = getCoordinates(pos, +num);
                 for(let coord in coordinates){
                     expect(Math.abs(coordinates[coord]-dataset[photo][num].control[coord])).toBeLessThan(dif[coord]);
                 }
