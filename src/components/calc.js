@@ -518,13 +518,13 @@ export const getCoordinates = (positions, glassesNumbers) => {
                 }
                 else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
                     wGlasses /= 1.2;
-                    xGl += wGlasses * 0.08333333 * 2;
+                    xGl += angle > 0 ? wGlasses * 0.08333333 * 2 : -wGlasses * 0.1;
                     hGlasses /= 1.2;
                     yGl += hGlasses * 0.08333333;
                 }
                 else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
                     wGlasses /= 1.2;
-                    xGl += wGlasses * 0.08333333 * 2;
+                    xGl += angle > 0 ? wGlasses * 0.08333333 * 2 : -wGlasses * 0.1;
                     hGlasses /= 1.2;
                     yGl += hGlasses * 0.08333333;
                 }
@@ -576,9 +576,9 @@ export const getCoordinates = (positions, glassesNumbers) => {
                 }
                 else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
                     wGlasses /= 1.2;
-                    xGl += wGlasses * 0.08333333 * 2;
+                    xGl += angle > 0 ? wGlasses * 0.08333333 * 2 : wGlasses * 0.05;
                     hGlasses /= 1.2;
-                    yGl += hGlasses * 0.08333333;
+                    yGl += hGlasses * 0.05;
                 }
                 else if (Math.abs(angle) <= 0.2){
                     wGlasses /= 1.2;
@@ -596,13 +596,13 @@ export const getCoordinates = (positions, glassesNumbers) => {
                 }
                 else if (Math.abs(angle) <= 0.6 && Math.abs(angle) > 0.4) {
                     wGlasses /= 1.2;
-                    xGl += wGlasses * 0.08333333 * 2;
+                    xGl += angle > 0 ? wGlasses * 0.08333333 * 2 : -wGlasses * 0.1;
                     hGlasses /= 1.2;
                     yGl += hGlasses * 0.08333333;
                 }
                 else if (Math.abs(angle) <= 0.4 && Math.abs(angle) > 0.2) {
                     wGlasses /= 1.2;
-                    xGl += wGlasses * 0.08333333 * 2;
+                    xGl += angle > 0 ? wGlasses * 0.08333333 * 2 : -wGlasses * 0.1;
                     hGlasses /= 1.2;
                     yGl += hGlasses * 0.08333333;
                 }
