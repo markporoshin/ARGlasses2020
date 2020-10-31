@@ -20,6 +20,7 @@ const App = () => {
                 toggleModel(true);
             });
         })().catch((reject) => console.log(reject));
+        document.title = "Virtual Glasses"
     }, []);
 
     const faceWasLoaded = (imagePreviewUrl) => setFace(imagePreviewUrl);

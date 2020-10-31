@@ -4,11 +4,10 @@ import { MDBTableBody } from 'mdbreact';
 import '../styles/ScrollTable.css';
 import './upload-button.css';
 
-import { faces } from '../resource';
+import { faces, strings } from '../resource';
 import PropTypes from "prop-types";
 
-
-const FaceSelector = ({ faceLoadedCallback, faceCallback }) => {
+const FaceSelector = ({ faceLoadedCallback, faceCallback, language }) => {
 
     const handleImageChange = (e) => {
         e.preventDefault();
@@ -20,13 +19,18 @@ const FaceSelector = ({ faceLoadedCallback, faceCallback }) => {
             faceLoadedCallback(reader.result);
         };
 
-        reader.readAsDataURL(file);
+        try {
+            reader.readAsDataURL(file);
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     return <div style={{ height: '100%' }}>
         <div className="upload-btn-wrapper">
-            <button className="btn">{}</button>
+            <button className="btn"/>
             <input type="file" name="myfile"
+                title={ strings[language]['chooseFile'] }
                 onChange={handleImageChange}
                 accept=".jpg, .jpeg, .png"
             />
@@ -40,7 +44,8 @@ const FaceSelector = ({ faceLoadedCallback, faceCallback }) => {
 
 FaceSelector.propTypes = {
     faceCallback: PropTypes.func,
-    faceLoadedCallback: PropTypes.func
+    faceLoadedCallback: PropTypes.func,
+    language: PropTypes.string
 }
 
 export default FaceSelector;

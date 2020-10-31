@@ -24,7 +24,6 @@ function FaceNotDetected({ language }) {
 }
 
 const Canvas = props => {
-    const detecting = strings[props.language]['Detecting'];
     const linsRef = useRef();
     const rimsRef = useRef();
 
@@ -57,13 +56,13 @@ const Canvas = props => {
         if (rimImage) {
             const image = new Image();
             image.src = rimImage.src;
-            image.onload = function() {
-                let width = image.width,
+            image.onload = () => {
+                const width = image.width,
                     height = image.height;
-                let context = rimsRef.current.getContext('2d');
+                const context = rimsRef.current.getContext('2d');
                 rimsRef.current.width = width * 2;
                 rimsRef.current.height = height * 2;
-                for (var i = 0; i <= height / 2; ++i) {
+                for (let i = 0; i <= height / 2; ++i) {
                     context.setTransform(1, -transKoef * i / height,
                         transKoef * i / height, 1, 0, 60);
                     context.drawImage(image,
@@ -81,13 +80,13 @@ const Canvas = props => {
         if (linsImage){
             const image = new Image();
             image.src = linsImage.src;
-            image.onload = function() {
-                let width = image.width,
+            image.onload = () => {
+                const width = image.width,
                     height = image.height;
-                let context = linsRef.current.getContext('2d');
+                const context = linsRef.current.getContext('2d');
                 linsRef.current.width = width * 2;
                 linsRef.current.height = height * 2;
-                for (var i = 0; i <= height / 2; ++i) {
+                for (let i = 0; i <= height / 2; ++i) {
                     context.setTransform(1, -transKoef * i / height,
                         transKoef * i / height, 1, 0, 60);
                     context.drawImage(image,
@@ -110,7 +109,8 @@ const Canvas = props => {
 
     useEffect(() => {
         if (faceImage) {
-            const ratio = Math.min(container.current.clientHeight / faceImage.height, container.current.clientWidth / faceImage.width);
+            const ratio = Math.min(container.current.clientHeight / faceImage.height,
+                container.current.clientWidth / faceImage.width);
             setFaceSize({
                 'h': faceImage.height * ratio,
                 'w': faceImage.width * ratio,
@@ -195,7 +195,7 @@ const Canvas = props => {
                     role="status"
                     aria-hidden="true"
                 />
-                {detecting}
+                {strings[props.language]['Detecting']}
             </Button>}
             {isFaceDetected === false && <FaceNotDetected language={props.language}/>}
             <div style={{ width: '100%', height: '10%' }}>
