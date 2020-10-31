@@ -1,17 +1,17 @@
-import {getCoordinates} from '../components/calc';
+import { getCoordinates } from '../components/calc';
 
 const fetch = require('node-fetch');
 const faceApi = require('face-api.js');
 
 const canvas = require('canvas');
-const {Canvas, Image, ImageData} = canvas;
+const { Canvas, Image, ImageData } = canvas;
 
 const fs = require('fs');
 
 const MODEL_URL = __dirname + '/models';
 
-faceApi.env.monkeyPatch({fetch, Canvas, Image, ImageData});
-beforeAll(async () => {
+faceApi.env.monkeyPatch({ fetch, Canvas, Image, ImageData });
+beforeAll(async() => {
     await faceApi.nets.ssdMobilenetv1.loadFromDisk(MODEL_URL);
     await faceApi.nets.faceLandmark68Net.loadFromDisk(MODEL_URL);
 });
@@ -42,7 +42,7 @@ describe('photos', () => {
             test('compare', async()=>{
                 const coordinates = getCoordinates(pos, +num);
                 for(let coord in coordinates){
-                    expect(Math.abs(coordinates[coord]-dataset[photo][num].control[coord])).toBeLessThan(dif[coord]);
+                    expect(Math.abs(coordinates[coord] - dataset[photo][num].control[coord])).toBeLessThan(dif[coord]);
                 }
             });
         });

@@ -1,9 +1,10 @@
 import React from 'react';
-import {Image, Table} from 'react-bootstrap';
-import {MDBTableBody} from 'mdbreact';
+import { Image, Table } from 'react-bootstrap';
+import { MDBTableBody } from 'mdbreact';
 import '../styles/ScrollTable.css';
+import PropTypes from 'prop-types';
 
-import {glasses} from '../resource';
+import { glasses } from '../resource';
 
 class GlassesSelector extends React.Component {
 
@@ -14,11 +15,10 @@ class GlassesSelector extends React.Component {
             language: props.language
         };
     }
-
     render() {
         let rows = [];
         glasses.forEach((item, index)=>{
-            rows.push({'handle':
+            rows.push({ 'handle':
                 <Image src={item} onClick={() => {this.state.glassesCallback(index);}} fluid />
             });
         });
@@ -28,6 +28,11 @@ class GlassesSelector extends React.Component {
             </Table>
         );
     }
+}
+
+GlassesSelector.propTypes = {
+    language: PropTypes.string,
+    glassesCallback: PropTypes.func
 }
 
 export default GlassesSelector;

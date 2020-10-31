@@ -1,14 +1,15 @@
-import {getLandmarks} from '../faceapi';
-import {rims, lins, strings} from '../resource';
-import {Form, Spinner, Button, Alert} from 'react-bootstrap';
+import { getLandmarks } from '../faceapi';
+import { rims, lins, strings } from '../resource';
+import { Form, Spinner, Button, Alert } from 'react-bootstrap';
 import Konva from 'react-konva';
 import InputRange from 'react-input-range';
 import useImage from 'use-image';
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import 'react-input-range/lib/css/index.css';
-import {getCoordinates} from './calc';
+import { getCoordinates } from './calc';
+import PropTypes from 'prop-types';
 
-function FaceNotDetected({language}) {
+function FaceNotDetected({ language }) {
     const [isShow, setShowFlag] = useState(true);
 
     const header = strings[language]['ohSnap'];
@@ -16,9 +17,9 @@ function FaceNotDetected({language}) {
 
     return isShow
         ? (<Alert variant="danger" onClose={() => { setShowFlag(false);}} dismissible>
-                <Alert.Heading>{header}</Alert.Heading>
-                <p>{body}</p>
-            </Alert>)
+            <Alert.Heading>{header}</Alert.Heading>
+            <p>{body}</p>
+        </Alert>)
         : null;
 }
 
@@ -32,7 +33,7 @@ const Canvas = props => {
 
     const [stageMigrate, setStageMigrate] = useState(1);
     const [faceImage] = useImage(props.faceImage);
-    const [faceSize, setFaceSize] = useState({'k': 1});
+    const [faceSize, setFaceSize] = useState({ 'k': 1 });
     const [faceDesc, setFaceDesc] = useState(null);
 
     const [linsImage] = useImage(lins[props.glassesNumber]);
@@ -60,8 +61,8 @@ const Canvas = props => {
                 let width = image.width,
                     height = image.height;
                 let context = rimsRef.current.getContext('2d');
-                rimsRef.current.width = width*2;
-                rimsRef.current.height = height*2;
+                rimsRef.current.width = width * 2;
+                rimsRef.current.height = height * 2;
                 for (var i = 0; i <= height / 2; ++i) {
                     context.setTransform(1, -transKoef * i / height,
                         transKoef * i / height, 1, 0, 60);
@@ -84,8 +85,8 @@ const Canvas = props => {
                 let width = image.width,
                     height = image.height;
                 let context = linsRef.current.getContext('2d');
-                linsRef.current.width = width*2;
-                linsRef.current.height = height*2;
+                linsRef.current.width = width * 2;
+                linsRef.current.height = height * 2;
                 for (var i = 0; i <= height / 2; ++i) {
                     context.setTransform(1, -transKoef * i / height,
                         transKoef * i / height, 1, 0, 60);
@@ -101,10 +102,10 @@ const Canvas = props => {
             };
             setLinUrl(linsRef.current);
         }
-        setStageX(stageX+stageMigrate);
-        setStageY(stageY+stageMigrate);
+        setStageX(stageX + stageMigrate);
+        setStageY(stageY + stageMigrate);
         setStageMigrate(-stageMigrate);
-        // eslint-disable-next-line
+    // eslint-disable-next-line
     },[glassesScheme, rimImage]);
 
     useEffect(() => {
@@ -121,7 +122,7 @@ const Canvas = props => {
     }, [faceImage, isLandmarksLoaded, props.faceImage, props.isModelsLoaded]);
 
     useEffect(() => {
-        const loadDecs = async () => {
+        const loadDecs = async() => {
             setFaceDetectedFlag(true);
             setFaceDesc(await getLandmarks(props.faceImage));
         };
@@ -156,7 +157,7 @@ const Canvas = props => {
         };
         const newScale = e.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
 
-        stage.scale({x: newScale, y: newScale});
+        stage.scale({ x: newScale, y: newScale });
         setScale(newScale);
         setStageX(-(mousePointTo.x - stage.getPointerPosition().x / newScale) * newScale);
         setStageY(-(mousePointTo.y - stage.getPointerPosition().y / newScale) * newScale);
@@ -170,7 +171,7 @@ const Canvas = props => {
     };
 
     return (
-        <div style={{width: '100%', height: '100%'}}>
+        <div style={{ width: '100%', height: '100%' }}>
             <canvas
                 style={{
                     position: 'absolute',
@@ -197,7 +198,7 @@ const Canvas = props => {
                 {detecting}
             </Button>}
             {isFaceDetected === false && <FaceNotDetected language={props.language}/>}
-            <div style={{width: '100%', height: '10%'}}>
+            <div style={{ width: '100%', height: '10%' }}>
                 <Form style={{
                     width: '90%',
                     margin: 'auto'
@@ -210,7 +211,7 @@ const Canvas = props => {
                     />
                 </Form>
             </div>
-            <div style={{width: '100%', height: '90%'}} ref={container}>
+            <div style={{ width: '100%', height: '90%' }} ref={container}>
                 {container.current &&
                 <Konva.Stage
                     height={container.current.clientHeight}
@@ -235,8 +236,8 @@ const Canvas = props => {
                         {linUrl && glassesScheme && isLandmarksLoaded &&
                         <Konva.Image
                             image={linUrl}
-                            height={glassesScheme['h'] * faceSize['ratio']*2}
-                            width={glassesScheme['w'] * faceSize['ratio']*2}
+                            height={glassesScheme['h'] * faceSize['ratio'] * 2}
+                            width={glassesScheme['w'] * faceSize['ratio'] * 2}
                             y={glassesScheme['y'] * faceSize['ratio']}
                             x={glassesScheme['x'] * faceSize['ratio']}
                             rotation={glassesScheme.angle}
@@ -245,8 +246,8 @@ const Canvas = props => {
                         {rimUrl && glassesScheme && isLandmarksLoaded &&
                         <Konva.Image
                             image={rimUrl}
-                            height={glassesScheme['h'] * faceSize['ratio']*2}
-                            width={glassesScheme['w'] * faceSize['ratio']*2}
+                            height={glassesScheme['h'] * faceSize['ratio'] * 2}
+                            width={glassesScheme['w'] * faceSize['ratio'] * 2}
                             y={glassesScheme['y'] * faceSize['ratio']}
                             x={glassesScheme['x'] * faceSize['ratio']}
                             rotation={glassesScheme.angle}
@@ -259,5 +260,15 @@ const Canvas = props => {
     );
 };
 
+Canvas.propTypes = {
+    language: PropTypes.string,
+    faceImage: PropTypes.any,
+    glassesNumber: PropTypes.number,
+    isModelsLoaded: PropTypes.any
+}
+
+FaceNotDetected.propTypes = {
+    language: PropTypes.string,
+}
 
 export default Canvas;

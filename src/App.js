@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {Col, Container, Row, Pagination} from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Col, Container, Row, Pagination } from 'react-bootstrap';
 import './App.css';
 import FaceSelector from './components/FaceSelector';
 import GlassesSelector from './components/GlassesSelector';
 import Canvas from './components/Canvas';
-import {faces} from './resource';
-import {loadModels} from './faceapi';
+import { faces } from './resource';
+import { loadModels } from './faceapi';
 
 const App = () => {
     const [selectedFaceNumber, setSelectedFaceNumber] = useState(null);
@@ -15,7 +15,7 @@ const App = () => {
     const [uploadedFace, setFace] = useState(undefined);
 
     useEffect(() => {
-        (async ()=>{
+        (async()=>{
             await loadModels().then(() => {
                 toggleModel(true);
             });
@@ -49,16 +49,16 @@ const App = () => {
                 <div style={{ height: '100%', width: '20%' }}>
                     <div>
                         <FaceSelector faceCallback={faceWasSelected}
-                                      faceLoadedCallback={faceWasLoaded}
-                                      language={language}/>
+                            faceLoadedCallback={faceWasLoaded}
+                            language={language}/>
                     </div>
                 </div>
 
                 <div style={{ height: '100%', width: '60%' }}>
                     <Canvas faceImage={uploadedFace ? uploadedFace : faces[selectedFaceNumber]}
-                            glassesNumber={selectedGlassesNumber}
-                            isModelsLoaded={isModelsLoaded}
-                            language={language}
+                        glassesNumber={selectedGlassesNumber}
+                        isModelsLoaded={isModelsLoaded}
+                        language={language}
                     />
                 </div>
 
