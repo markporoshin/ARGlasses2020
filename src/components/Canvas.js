@@ -101,9 +101,11 @@ const Canvas = props => {
             };
             setLinUrl(linsRef.current);
         }
-        setStageX(stageX + stageMigrate);
-        setStageY(stageY + stageMigrate);
-        setStageMigrate(-stageMigrate);
+        setTimeout(()=>{
+            setStageX(stageX + stageMigrate);
+            setStageY(stageY + stageMigrate);
+            setStageMigrate(-stageMigrate);
+        });
     // eslint-disable-next-line
     },[glassesScheme, rimImage]);
 
