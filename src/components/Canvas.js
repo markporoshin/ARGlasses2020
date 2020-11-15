@@ -105,7 +105,7 @@ const Canvas = props => {
             setStageX(stageX + stageMigrate);
             setStageY(stageY + stageMigrate);
             setStageMigrate(-stageMigrate);
-        });
+        }, 100);
     // eslint-disable-next-line
     },[glassesScheme, rimImage]);
 
